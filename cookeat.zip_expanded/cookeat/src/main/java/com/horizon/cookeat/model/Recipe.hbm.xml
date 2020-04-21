@@ -2,3 +2,14 @@
 <!DOCTYPE hibernate-mapping PUBLIC
 	"~//Hibernate/Hibernate Mapping DTD 3.0//EN"
 	"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+	
+	<class name="bean.Recipe" table="RECIPE">
+		<id name="id" column="id"></id>
+		<generator class="increment"></generator>
+		
+		<property name="designation" column="designation"/>		
+		<property name="prep_time" column="prep_time"/>		
+		<property name="total_price" column="total_price"/>
+	</class>
+
+</hibernate-mapping>
