@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { Suspense, lazy } from 'react';
 import Header from './components/header/Header';
-import Home from './routes/Home';
 import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import './App.css';
+
+const Home = lazy(() => import('./routes/Home'));
 
 
 function App() {
@@ -12,9 +13,11 @@ function App() {
       <BrowserRouter>
         <Header />
         <Container className="container">
-          <Switch>
-            <Route path ='/' component={Home} />
-          </Switch>
+          <Suspense fallback={<div>Loading...</div>}>
+            <Switch>
+              <Route path ='/' component={Home} />
+            </Switch>
+          </Suspense>
         </Container>
       </BrowserRouter>
     </div>
