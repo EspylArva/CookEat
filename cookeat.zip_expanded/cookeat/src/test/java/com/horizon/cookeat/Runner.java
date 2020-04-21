@@ -2,71 +2,82 @@ package com.horizon.cookeat;
 
 import java.util.List;
 
-import org.hibernate.HibernateException;
-import org.hibernate.Query;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.hibernate.query.Query;
 
 import com.horizon.cookeat.model.Recipe;
 
-@SuppressWarnings("deprecation")
 public class Runner {
+	
+	public final Logger log = LoggerFactory.getLogger(this.getClass());
     
     @Test
     public void crud() {
+    	
     	try
     	{
+    		// DB at: 					http://127.0.0.1:59843/browser/#
+    		// Create template data:	https://www.mockaroo.com/
 	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-	    	Utils.log.debug("Opening session...");
+	    	log.debug("Opening session...");
 	        Session session = sessionFactory.openSession();
-	        Utils.log.debug("Session opened");
+	        log.debug("Session opened");
+	        try
+	        {
+	        	org.hibernate.query.Query q = session.createQuery("DROP TABLE IF EXISTS recipe CASCADE");
+	        }
+	        catch(Exception e) { log.debug("Reset: " + e.getMessage()); }
+	        
+	        log.debug("Creating recipes...");
 	        create(session);
 	        read(session);
 	        
+	        log.debug("Updating tarte aux pommes price...");
 	        update(session);
 	        read(session);
 	        
+	        log.debug("Deleting ratatouille record...");
 	        delete(session);
 	        read(session);
 	         
 	        session.close();
     	}
-    	catch(Exception e) { Utils.log.debug("Crud: " + e.getMessage()); }
+    	catch(Exception e) { log.debug("Crud: " + e.getMessage()); }
     }
      
     private void delete(Session session) {
     	try
     	{    		
-    		Utils.log.debug("Deleting mondeo record...");
-	        Recipe trucDegueu = (Recipe) session.get(Recipe.class, "3");
+	        Recipe trucDegueu = (Recipe) session.get(Recipe.class, 3);
 	         
 	        session.beginTransaction();
 	        session.delete(trucDegueu);
 	        session.getTransaction().commit();
     	}
-    	catch(Exception ex) { Utils.log.debug("Delete: " + ex.getMessage()); }
+    	catch(Exception ex) { log.debug("Delete: " + ex.getMessage()); }
     }
      
     private void update(Session session) {
         try {	        	
-        	Utils.log.debug("Updating tarte aux pommes price...");
-	        Recipe tartopom = (Recipe) session.get(Recipe.class, "2");
+	        Recipe tartopom = (Recipe) session.get(Recipe.class, 2);
 	        tartopom.setTotal_price(2000);
 	         
 	        session.beginTransaction();
 	        session.saveOrUpdate(tartopom);
 	        session.getTransaction().commit();
         }
-        catch (Exception e) { Utils.log.debug("Update: " +e.getMessage()); }
+        catch (Exception e) { log.debug("Update: " +e.getMessage()); }
     }
  
     private void create(Session session) {
     	try
     	{
-	    	Utils.log.debug("Creating car recipes...");
 	        
 	        Recipe patesCarbo = new Recipe();
 	        patesCarbo.setId(1);
@@ -74,7 +85,7 @@ public class Runner {
 	        patesCarbo.setPrep_time(15);
 	        patesCarbo.setTotal_price(500);
 	        
-	        Utils.log.debug("Created Pates a la carbonara");
+	        log.debug("Created Pates a la carbonara");
 	        
 	        Recipe tarteAuxPomxml = new Recipe();
 	        tarteAuxPomxml.setId(2);
@@ -82,12 +93,23 @@ public class Runner {
 	        tarteAuxPomxml.setPrep_time(90);
 	        tarteAuxPomxml.setTotal_price(1500);
 	        
-	        Utils.log.debug("Created Tarte aux pommes");
+	        log.debug("Created Tarte aux pommes");
+	        
+	        Recipe ratatouille = new Recipe();
+	        ratatouille.setId(3);
+	        ratatouille.setDesignation("Ratatouille");
+	        ratatouille.setPrep_time(120);
+	        ratatouille.setTotal_price(1200);
+	        
+	        log.debug("Created Ratatouille");
 	        
 	         
 	        session.beginTransaction();
+	        
 	        session.save(patesCarbo);
 	        session.save(tarteAuxPomxml);
+	        session.save(ratatouille);
+	        
 	        session.getTransaction().commit();
     	}
     	catch(Exception e) { Utils.log.debug("Create: " + e.getMessage()); }
@@ -99,11 +121,13 @@ public class Runner {
 	        Query q = session.createQuery("select _recipe from Recipe _recipe");
 	         
 	        List<Recipe> recipes = q.list();
-	        Utils.log.debug("Reading recipes in database...");
+	        log.debug("Reading recipes in database...");
 	        for (Recipe r : recipes) {
-	        	Utils.log.debug(String.format("#%s - %s", r.getId(), r.getDesignation()));
+	        	log.debug(String.format("#%s - %s :: takes %s minutes, costs %s €",
+	        			r.getId(), r.getDesignation(), r.getPrep_time(), (r.getTotal_price()/100)
+	        			));
 	        }
     	}
-    	catch(Exception e) {Utils.log.debug("Read: " + e.getMessage()); }
+    	catch(Exception e) {log.debug("Read: " + e.getMessage()); }
     }
 }
