@@ -7,6 +7,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
+import org.hibernate.cfg.Configuration;
 import org.junit.jupiter.api.Test;
 
 import com.horizon.cookeat.model.Recipe;
@@ -17,11 +18,11 @@ public class Runner {
     @Test
     public void crud() {
     	try
-    	{		
-//    		SessionFactory sessionFactory = configuration.buildSessionFactory();
-	    	SessionFactory sessionFactory = new AnnotationConfiguration().configure().buildSessionFactory();
+    	{
+	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+	    	Utils.log.debug("Opening session...");
 	        Session session = sessionFactory.openSession();
-	        
+	        Utils.log.debug("Session opened");
 	        create(session);
 	        read(session);
 	        
@@ -95,12 +96,12 @@ public class Runner {
     private void read(Session session) {
     	try
     	{
-	        Query q = session.createQuery("select recipe from Car _car");
+	        Query q = session.createQuery("select _recipe from Recipe _recipe");
 	         
 	        List<Recipe> recipes = q.list();
 	        Utils.log.debug("Reading recipes in database...");
 	        for (Recipe r : recipes) {
-	        	Utils.log.debug("#%s - %s", r.getId(), r.getDesignation());
+	        	Utils.log.debug(String.format("#%s - %s", r.getId(), r.getDesignation()));
 	        }
     	}
     	catch(Exception e) {Utils.log.debug("Read: " + e.getMessage()); }
