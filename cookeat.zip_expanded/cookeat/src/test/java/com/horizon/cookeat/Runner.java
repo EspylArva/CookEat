@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.hibernate.query.Query;
 
+import com.horizon.cookeat.model.Ingredient;
 import com.horizon.cookeat.model.Recipe;
 
 public class Runner {
@@ -30,9 +31,15 @@ public class Runner {
 	        log.debug("Session opened");
 	        try
 	        {
+	        	log.debug("Reseting data...");
 	        	org.hibernate.query.Query q = session.createQuery("DROP TABLE IF EXISTS recipe CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS ingredient CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS recipe_ingredients CASCADE");
+	        	log.debug("Data reset");
 	        }
 	        catch(Exception e) { log.debug("Reset: " + e.getMessage()); }
+	        
+	        
 	        
 	        log.debug("Creating recipes...");
 	        create(session);
@@ -42,9 +49,9 @@ public class Runner {
 	        update(session);
 	        read(session);
 	        
-	        log.debug("Deleting ratatouille record...");
-	        delete(session);
-	        read(session);
+	        //log.debug("Deleting ratatouille record...");
+	        //delete(session);
+	        //read(session);
 	         
 	        session.close();
     	}
@@ -78,28 +85,41 @@ public class Runner {
     private void create(Session session) {
     	try
     	{
-	        
+    		log.debug("Creating Ingredients");
+	        Ingredient lardon = new Ingredient("kilogramme;kg", "lardon", 700);
+    		Ingredient pate = new Ingredient("kilogramme;kg", "pate", 500);
+    		Ingredient pomme = new Ingredient("kilogramme;kg", "pomme", 600);
+    		
+    		session.save(lardon);
+	        session.save(pate);
+	        session.save(pomme);
+    		
+    		log.debug("Creating Recipes");
 	        Recipe patesCarbo = new Recipe();
-	        patesCarbo.setId(1);
+//	        patesCarbo.setId(1);
 	        patesCarbo.setDesignation("Pates a la carbonara");
 	        patesCarbo.setPrep_time(15);
 	        patesCarbo.setTotal_price(500);
+	        patesCarbo.addIngredient(pate);
+	        patesCarbo.addIngredient(lardon);
 	        
 	        log.debug("Created Pates a la carbonara");
 	        
 	        Recipe tarteAuxPomxml = new Recipe();
-	        tarteAuxPomxml.setId(2);
+//	        tarteAuxPomxml.setId(2);
 	        tarteAuxPomxml.setDesignation("Tarte aux pommes");
 	        tarteAuxPomxml.setPrep_time(90);
 	        tarteAuxPomxml.setTotal_price(1500);
+	        patesCarbo.addIngredient(pomme);
 	        
 	        log.debug("Created Tarte aux pommes");
 	        
 	        Recipe ratatouille = new Recipe();
-	        ratatouille.setId(3);
+//	        ratatouille.setId(3);
 	        ratatouille.setDesignation("Ratatouille");
 	        ratatouille.setPrep_time(120);
 	        ratatouille.setTotal_price(1200);
+	        ratatouille.addIngredient(lardon);
 	        
 	        log.debug("Created Ratatouille");
 	        

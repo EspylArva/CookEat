@@ -1,5 +1,8 @@
 package com.horizon.cookeat.model;
 
+import javax.persistence.Entity;
+
+@Entity
 public class Gallery {
 
 	 // ATTRIBUTES //

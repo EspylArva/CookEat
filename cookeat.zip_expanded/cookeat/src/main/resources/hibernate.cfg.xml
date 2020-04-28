@@ -23,6 +23,7 @@
         
         <!-- Annotated entity classes -->
         <mapping class="com.horizon.cookeat.model.Recipe"/>
+        <mapping class="com.horizon.cookeat.model.Ingredient"/>
          
     </session-factory>
 </hibernate-configuration>
