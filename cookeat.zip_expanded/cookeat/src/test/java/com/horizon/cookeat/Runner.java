@@ -1,18 +1,20 @@
 package com.horizon.cookeat;
 
+import java.util.ArrayList;
 import java.util.List;
-
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.hibernate.query.Query;
 
 import com.horizon.cookeat.model.Ingredient;
 import com.horizon.cookeat.model.Recipe;
+import com.horizon.cookeat.model.*;
+
 
 public class Runner {
 	
@@ -32,9 +34,14 @@ public class Runner {
 	        try
 	        {
 	        	log.debug("Reseting data...");
-	        	org.hibernate.query.Query q = session.createQuery("DROP TABLE IF EXISTS recipe CASCADE");
-	        	q = session.createQuery("DROP TABLE IF EXISTS ingredient CASCADE");
-	        	q = session.createQuery("DROP TABLE IF EXISTS recipe_ingredients CASCADE");
+//	        	org.hibernate.query.Query q = session.createQuery("select 'drop table if exists ' || tablename || '\" cascade;' from pg_tables where schemaname = 'public_cookeat';");
+	        	org.hibernate.query.Query q = session.createQuery("DROP TABLE IF EXISTS ingredient CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS recipe CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS recipe_ingredient CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS equipment CASCADE");
+	        	q = session.createQuery("DROP TABLE IF EXISTS recipe_equipment CASCADE");
+	        	
+	        	
 	        	log.debug("Data reset");
 	        }
 	        catch(Exception e) { log.debug("Reset: " + e.getMessage()); }
@@ -85,50 +92,43 @@ public class Runner {
     private void create(Session session) {
     	try
     	{
+    		session.beginTransaction();
+
     		log.debug("Creating Ingredients");
-	        Ingredient lardon = new Ingredient("kilogramme;kg", "lardon", 700);
-    		Ingredient pate = new Ingredient("kilogramme;kg", "pate", 500);
-    		Ingredient pomme = new Ingredient("kilogramme;kg", "pomme", 600);
-    		
-    		session.save(lardon);
-	        session.save(pate);
-	        session.save(pomme);
-    		
+	        Ingredient JIMMYon = new Ingredient("kilogramme;kg", "lardon", 700);
+    		Ingredient patrick = new Ingredient("kilogramme;kg", "pate", 500);
+    		Ingredient pomXML = new Ingredient("kilogramme;kg", "pomme", 600);
+
     		log.debug("Creating Recipes");
-	        Recipe patesCarbo = new Recipe();
-//	        patesCarbo.setId(1);
-	        patesCarbo.setDesignation("Pates a la carbonara");
-	        patesCarbo.setPrep_time(15);
-	        patesCarbo.setTotal_price(500);
-	        patesCarbo.addIngredient(pate);
-	        patesCarbo.addIngredient(lardon);
+	        Recipe patesCarbo = new Recipe("Pates a la carbonara", 15, 500, null);
+	        Recipe tarteAuxPomXML = new Recipe("Tarte aux pommes", 90, 1500, null);
+	        Recipe trucDegueu = new Recipe("Ratatouille", 120, 1200, null);
+
+	        log.debug("Creating Equipment");
+	        Equipment sacreCULyere = new Equipment("Cuillere a soupe", null);
+        	Equipment dominatrixTool = new Equipment("Fouet", null);
 	        
-	        log.debug("Created Pates a la carbonara");
+	        patesCarbo.addIngredient(patrick);
+	        patesCarbo.addIngredient(JIMMYon);
+	        patesCarbo.addEquipment(dominatrixTool);
+	        patesCarbo.addEquipment(sacreCULyere);
 	        
-	        Recipe tarteAuxPomxml = new Recipe();
-//	        tarteAuxPomxml.setId(2);
-	        tarteAuxPomxml.setDesignation("Tarte aux pommes");
-	        tarteAuxPomxml.setPrep_time(90);
-	        tarteAuxPomxml.setTotal_price(1500);
-	        patesCarbo.addIngredient(pomme);
+	        tarteAuxPomXML.addIngredient(pomXML);
+	        tarteAuxPomXML.addEquipment(sacreCULyere);
 	        
-	        log.debug("Created Tarte aux pommes");
+	        trucDegueu.addIngredient(JIMMYon);
+	        trucDegueu.addEquipment(sacreCULyere);
+	        	        
+    		session.save(JIMMYon);
+    		session.save(pomXML);
+	        session.save(patrick);
 	        
-	        Recipe ratatouille = new Recipe();
-//	        ratatouille.setId(3);
-	        ratatouille.setDesignation("Ratatouille");
-	        ratatouille.setPrep_time(120);
-	        ratatouille.setTotal_price(1200);
-	        ratatouille.addIngredient(lardon);
-	        
-	        log.debug("Created Ratatouille");
-	        
-	         
-	        session.beginTransaction();
+	        session.save(sacreCULyere);
+	        session.save(dominatrixTool);
 	        
 	        session.save(patesCarbo);
-	        session.save(tarteAuxPomxml);
-	        session.save(ratatouille);
+	        session.save(tarteAuxPomXML);
+	        session.save(trucDegueu);
 	        
 	        session.getTransaction().commit();
     	}

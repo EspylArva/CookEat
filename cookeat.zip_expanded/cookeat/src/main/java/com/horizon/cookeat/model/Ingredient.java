@@ -1,13 +1,15 @@
 package com.horizon.cookeat.model;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -25,8 +27,17 @@ public class Ingredient {
 	private String designation;
 	private int price_per_unit;
 	
-	@ManyToMany(mappedBy = "list_ingredients")
-    private Set<Recipe> list_recipes = new HashSet<Recipe>();
+//	@ManyToMany(mappedBy = "list_ingredients")
+//    private Set<Recipe> list_recipes = new HashSet<Recipe>();
+	
+	@OneToMany(
+	        mappedBy = "ingredient",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+    )
+    private Set<RecipeIngredient> recipes = new HashSet<>();
+	
+	// CONSTRUCTOR //
 	
 	public Ingredient(String unit, String designation, int ppu)
 	{
@@ -37,14 +48,25 @@ public class Ingredient {
 	
 	// GETTERS AND SETTERS //
 	
+	
 	public void addRecipe(Recipe r)
 	{
-		list_recipes.add(r);
+		RecipeIngredient join = new RecipeIngredient(r, this);
+		recipes.add(join);
 	}
 	
 	public void removeRecipe(Recipe r)
 	{
-		list_recipes.remove(r);
+	    for (Iterator<RecipeIngredient> iterator = recipes.iterator(); iterator.hasNext(); )
+	    {
+	        RecipeIngredient join = iterator.next();
+	        if (join.getIngredient().equals(this) &&
+	                join.getRecipe().equals(r)) {
+	            iterator.remove();
+	            join.setRecipe(null);
+	            join.setIngredient(null);
+	        }
+	    }
 	}
 	
 	public int getId() {

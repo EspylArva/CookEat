@@ -2,6 +2,8 @@ package com.horizon.cookeat.model;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -12,6 +14,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
@@ -36,25 +39,76 @@ public class Recipe implements Serializable{
 	private int total_price;
 	private String path_to_icon;
 	
-
+	@OneToMany(
+	        mappedBy = "recipe",
+	        cascade = CascadeType.ALL,
+	        orphanRemoval = true
+    )
+    private Set<RecipeIngredient> ingredients = new HashSet<>();
+	
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(
-			name = "recipe_ingredients",
+			name = "recipe_equipment",
 			joinColumns = @JoinColumn(name = "recipe_id"),
-			inverseJoinColumns = @JoinColumn(name = "ingredient_id")
+			inverseJoinColumns = @JoinColumn(name = "equipment_id")
 	)
-	private Set<Ingredient> list_ingredients = new HashSet<Ingredient>();
+	private Set<Equipment> list_equipments = new HashSet<Equipment>();
+	
+	// METHODS //
+	
+	// CONSTRUCTOR //
+	public Recipe(String designation, int prep_time, int total_price, String path_icon)
+	{
+		this.designation = designation;
+		this.prep_time = prep_time;
+		this.total_price = total_price;
+		this.path_to_icon = path_icon;
+	}
+	
+	public Recipe(String designation, int prep_time, int total_price, String path_icon, List<Ingredient> ingredients)
+	{
+		this.designation = designation;
+		this.prep_time = prep_time;
+		this.total_price = total_price;
+		this.path_to_icon = path_icon;
+		
+		for(Ingredient ingredient : ingredients)
+		{
+			addIngredient(ingredient);
+		}
+	}
+	
 	
 	// GETTERS AND SETTERS //
 	
+	public void addEquipment(Equipment equipment) {
+		list_equipments.add(equipment);
+	}
+	
+	public void removeEquipment(Equipment equipment)
+	{
+		list_equipments.remove(equipment);
+	}
+	
 	public void addIngredient(Ingredient i)
 	{
-		list_ingredients.add(i);
+		RecipeIngredient join = new RecipeIngredient(this, i);
+		ingredients.add(join);
 	}
 	
 	public void removeIngredient(Ingredient i)
 	{
-		list_ingredients.remove(i);
+	    for (Iterator<RecipeIngredient> iterator = ingredients.iterator(); iterator.hasNext(); )
+	    {
+	        RecipeIngredient join = iterator.next();
+	        if (join.getRecipe().equals(this) &&
+	                join.getIngredient().equals(i)) {
+	            iterator.remove();
+	            join.setRecipe(null);
+	            join.setIngredient(null);
+	        }
+	    }
 	}
 	
 	public int getId() {
