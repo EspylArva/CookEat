@@ -1,9 +1,11 @@
 package com.horizon.cookeat.model;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,26 +16,20 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Recipe")
+@Table(name="recipe")
 public class Recipe implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
 	
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")
 	@SequenceGenerator(name="recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize = 100)
 	private int id;
-	
-	
 	private String designation;
 	private int prep_time;
 	private int total_price;
@@ -44,7 +40,7 @@ public class Recipe implements Serializable{
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true
     )
-    private Set<RecipeIngredient> ingredients = new HashSet<>();
+    private Set<RecipeIngredient> list_ingredients = new HashSet<>();
 	
 	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
@@ -55,7 +51,25 @@ public class Recipe implements Serializable{
 	)
 	private Set<Equipment> list_equipments = new HashSet<Equipment>();
 	
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+//	@MapKey(name = "order")
+	private Set<Etape> list_steps = new HashSet<Etape>();
+	
+	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+	private Set<Gallery> list_gallery = new HashSet<Gallery>();
+	
 	// METHODS //
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Recipe )) return false;
+        return id == ((Recipe)o).getId();
+    }
+ 
+    @Override
+    public int hashCode() {
+        return id;
+    }
 	
 	// CONSTRUCTOR //
 	public Recipe(String designation, int prep_time, int total_price, String path_icon)
@@ -81,6 +95,30 @@ public class Recipe implements Serializable{
 	
 	
 	// GETTERS AND SETTERS //
+	public void addGallery(Gallery g)
+	{
+		list_gallery.add(g);
+		g.setRecipe(this);
+	}
+	public void removeGallery(Gallery g)
+	{
+		g.setRecipe(null);
+		list_gallery.remove(g);
+	}
+	
+	public void addStep(Etape s)
+	{
+		s.setRecipe(this);
+		list_steps.add(s);
+//		list_steps.put(s.getOrder(), s);
+	}
+	
+	public void removeStep(Etape s)
+	{
+		s.setRecipe(null);
+		list_steps.remove(s);
+//		list_steps.remove(s.getOrder());
+	}
 	
 	public void addEquipment(Equipment equipment) {
 		list_equipments.add(equipment);
@@ -94,12 +132,12 @@ public class Recipe implements Serializable{
 	public void addIngredient(Ingredient i)
 	{
 		RecipeIngredient join = new RecipeIngredient(this, i);
-		ingredients.add(join);
+		list_ingredients.add(join);
 	}
 	
 	public void removeIngredient(Ingredient i)
 	{
-	    for (Iterator<RecipeIngredient> iterator = ingredients.iterator(); iterator.hasNext(); )
+	    for (Iterator<RecipeIngredient> iterator = list_ingredients.iterator(); iterator.hasNext(); )
 	    {
 	        RecipeIngredient join = iterator.next();
 	        if (join.getRecipe().equals(this) &&

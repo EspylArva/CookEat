@@ -1,4 +1,4 @@
-package com.horizon.cookeat.model;
+	package com.horizon.cookeat.model;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -9,12 +9,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Ingredient")
+@Table(name="ingredient")
 public class Ingredient {
 	
 	
@@ -27,18 +30,35 @@ public class Ingredient {
 	private String designation;
 	private int price_per_unit;
 	
-//	@ManyToMany(mappedBy = "list_ingredients")
-//    private Set<Recipe> list_recipes = new HashSet<Recipe>();
-	
 	@OneToMany(
 	        mappedBy = "ingredient",
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true
     )
-    private Set<RecipeIngredient> recipes = new HashSet<>();
+    private Set<RecipeIngredient> list_recipes = new HashSet<>();
+	
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@JoinTable(
+			name = "ingredient_allergene",
+			joinColumns = @JoinColumn(name = "ingredient_id"),
+			inverseJoinColumns = @JoinColumn(name = "allergene_id")
+	)
+	private Set<Allergene> list_allergenes = new HashSet<Allergene>();
+	
+	// METHODS //
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ingredient )) return false;
+        return id == ((Ingredient) o).getId();
+    }
+ 
+    @Override
+    public int hashCode() {
+        return id;
+    }
 	
 	// CONSTRUCTOR //
-	
 	public Ingredient(String unit, String designation, int ppu)
 	{
 		this.unit = unit;
@@ -47,17 +67,22 @@ public class Ingredient {
 	}
 	
 	// GETTERS AND SETTERS //
-	
-	
+	public void addAllergene(Allergene a)
+	{
+		list_allergenes.add(a);
+	}
+	public void removeAllergene(Allergene a)
+	{
+		list_allergenes.remove(a);
+	}
 	public void addRecipe(Recipe r)
 	{
 		RecipeIngredient join = new RecipeIngredient(r, this);
-		recipes.add(join);
+		list_recipes.add(join);
 	}
-	
 	public void removeRecipe(Recipe r)
 	{
-	    for (Iterator<RecipeIngredient> iterator = recipes.iterator(); iterator.hasNext(); )
+	    for (Iterator<RecipeIngredient> iterator = list_recipes.iterator(); iterator.hasNext(); )
 	    {
 	        RecipeIngredient join = iterator.next();
 	        if (join.getIngredient().equals(this) &&

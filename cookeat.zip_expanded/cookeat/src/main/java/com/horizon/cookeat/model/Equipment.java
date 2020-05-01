@@ -12,7 +12,7 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Equipment")
+@Table(name="equipment")
 public class Equipment {
 	// ATTRIBUTES //
 	
@@ -27,17 +27,27 @@ public class Equipment {
 	@ManyToMany(mappedBy = "list_equipments")
     private Set<Recipe> list_recipes = new HashSet<Recipe>();
 	
-	// CONSTRUCTOR //
+	// METHODS //
+	@Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Equipment)) return false;
+        return id == ((Equipment) o).getId();
+    }
+ 
+    @Override
+    public int hashCode() {
+        return id;
+    }
 	
+	// CONSTRUCTOR //
 	public Equipment(String designation, String path_icon)
 	{
 		this.designation = designation;
 		this.path_to_icon = path_icon;
 	}
 	
-	
 	// GETTERS AND SETTERS //
-	
 	public void addEquipment(Recipe recipe) {
 		list_recipes.add(recipe);
 	}

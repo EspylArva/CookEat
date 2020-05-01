@@ -22,9 +22,12 @@
         <property name="hibernate.hbm2ddl.auto">create-drop</property>
         
         <!-- Annotated entity classes -->
-        <mapping class="com.horizon.cookeat.model.Recipe"/>
         <mapping class="com.horizon.cookeat.model.Ingredient"/>
         <mapping class="com.horizon.cookeat.model.Equipment"/>
+        <mapping class="com.horizon.cookeat.model.Allergene"/>
+        <mapping class="com.horizon.cookeat.model.Gallery"/>
+        <mapping class="com.horizon.cookeat.model.Etape"/>
+        <mapping class="com.horizon.cookeat.model.Recipe"/>
         
         <mapping class="com.horizon.cookeat.model.RecipeIngredient"/>
          
