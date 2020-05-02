@@ -30,6 +30,7 @@ public class RecipeIngredientId implements Serializable
     
     
     // CONSTRUCTOR //
+    public RecipeIngredientId() {}
     
     public RecipeIngredientId(int r_id, int i_id)
     {

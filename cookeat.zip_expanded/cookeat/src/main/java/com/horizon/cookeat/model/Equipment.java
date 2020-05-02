@@ -41,6 +41,8 @@ public class Equipment {
     }
 	
 	// CONSTRUCTOR //
+    public Equipment() {}
+    
 	public Equipment(String designation, String path_icon)
 	{
 		this.designation = designation;

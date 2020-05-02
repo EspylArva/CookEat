@@ -38,6 +38,8 @@ public class Allergene {
     }	
 	
 	// CONSTRUCTOR //
+    public Allergene() {}
+    
 	public Allergene(String description)
 	{
 		this.description = description;

@@ -2,16 +2,19 @@ package com.horizon.cookeat;
 
 import java.util.List;
 
+
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
+import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import com.horizon.cookeat.model.*;
+import com.horizon.cookeat.model.Equipment;
+import com.horizon.cookeat.model.Etape;
+import com.horizon.cookeat.model.Gallery;
+import com.horizon.cookeat.model.Ingredient;
+import com.horizon.cookeat.model.Recipe;
 
 
 public class Runner {
@@ -25,35 +28,14 @@ public class Runner {
     	{
     		// DB at: 					http://127.0.0.1:59843/browser/#
     		// Create template data:	https://www.mockaroo.com/
-	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+//	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 	    	log.debug("Opening session...");
-	        Session session = sessionFactory.openSession();
+	        Session session = Utils.sessionFactory.openSession();
+	        Transaction tx = null;
 	        log.debug("Session opened");
-	        try
-	        {
-	        	log.debug("Reseting data...");
-//	        	org.hibernate.query.Query q = session.createQuery("select 'drop table if exists ' || tablename || '\" cascade;' from pg_tables where schemaname = 'public_cookeat';");
-	        	session.createQuery("DROP TABLE IF EXISTS ingredient CASCADE");
-	        	
-	        	session.createQuery("DROP TABLE IF EXISTS recipe CASCADE");
-	        	session.createQuery("DROP TABLE IF EXISTS recipe_ingredient CASCADE");
-	        	
-	        	session.createQuery("DROP TABLE IF EXISTS equipment CASCADE");
-	        	session.createQuery("DROP TABLE IF EXISTS recipe_equipment CASCADE");
-	        	
-	        	session.createQuery("DROP TABLE IF EXISTS etape CASCADE");
-	        	
-	        	session.createQuery("DROP TABLE IF EXISTS gallery CASCADE");
-	        		        	
-	        	log.debug("Data reset");
-	        }
-	        catch(Exception e) { log.debug("Reset: " + e.getMessage()); }
-	        
-	        
-	        
 	        log.debug("Creating recipes...");
-	        create(session);
-	        read(session);
+	        create();
+	        read();
 	        
 //	        log.debug("Updating tarte aux pommes price...");
 //	        update(session);
@@ -63,7 +45,7 @@ public class Runner {
 	        //delete(session);
 	        //read(session);
 	         
-	        session.close();
+//	        session.close();
     	}
     	catch(Exception e) { log.debug("Crud: " + e.getMessage()); }
     }
@@ -92,10 +74,13 @@ public class Runner {
         catch (Exception e) { log.debug("Update: " +e.getMessage()); }
     }
  
-    private void create(Session session) {
+    private void create() {
+    	Session session = Utils.sessionFactory.openSession();
+    	Transaction tx = null;
     	try
     	{
-    		session.beginTransaction();
+    		tx = session.beginTransaction();
+//    		session.beginTransaction();
 
     		log.debug("Creating Ingredients");
 	        Ingredient JIMMYon = new Ingredient("kilogramme;kg", "lardon", 700);
@@ -156,14 +141,24 @@ public class Runner {
 	        session.save(g3);
 	        
 	        
-	        session.getTransaction().commit();
+	        tx.commit();
     	}
-    	catch(Exception e) { Utils.log.debug("Create: " + e.getMessage()); }
+    	catch (RuntimeException e) {
+    	    if (tx != null) tx.rollback();
+    	    throw e; // or display error message
+    	}
+    	finally {
+    	    session.close();
+    	}
     }
      
-    private void read(Session session) {
+    private void read() {
+    	Session session = Utils.sessionFactory.openSession();
+    	Transaction tx = null;
     	try
-    	{
+    	{	
+    		tx = session.beginTransaction();
+    		
 	        Query q = session.createQuery("select _recipe from Recipe _recipe");
 	         
 	        List<Recipe> recipes = q.list();
@@ -174,6 +169,12 @@ public class Runner {
 	        			));
 	        }
     	}
-    	catch(Exception e) {log.debug("Read: " + e.getMessage()); }
+    	catch (RuntimeException e) {
+    	    if (tx != null) tx.rollback();
+    	    throw e; // or display error message
+    	}
+    	finally {
+    	    session.close();
+    	}
     }
 }

@@ -37,6 +37,8 @@ public class Etape {
     }
 	
 	// CONSTRUCTOR //
+    public Etape() {}
+    
 	public Etape(int step_order, String description)
 	{
 		this.step_order = step_order;

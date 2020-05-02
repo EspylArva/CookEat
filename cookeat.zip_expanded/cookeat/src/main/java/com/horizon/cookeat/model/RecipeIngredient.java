@@ -50,6 +50,7 @@ public class RecipeIngredient {
     }
  
     // CONSTRUCTOR //
+    public RecipeIngredient() {}
     
     public RecipeIngredient(Recipe r, Ingredient i) {
         this.recipe = r;

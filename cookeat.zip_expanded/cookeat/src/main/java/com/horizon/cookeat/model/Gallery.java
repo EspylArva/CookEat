@@ -37,6 +37,8 @@ public class Gallery {
     }
 
 	// CONSTRUCTOR //
+    public Gallery() {}
+    
 	public Gallery(String path, String description)
 	{
 		this.path = path;

@@ -59,6 +59,8 @@ public class Ingredient {
     }
 	
 	// CONSTRUCTOR //
+    public Ingredient() {}
+    
 	public Ingredient(String unit, String designation, int ppu)
 	{
 		this.unit = unit;

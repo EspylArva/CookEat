@@ -1,43 +1,68 @@
 package com.horizon.cookeat;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.horizon.cookeat.model.*;
+import com.horizon.cookeat.model.Recipe;
 
 @Service
 public class Services {
 	
+	
+	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
-	public List<Recipe> listOfRecipes()
+	public List<Recipe> fetchAllRecipes()
 	{
-		SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-    	//log.debug("Opening session...");
-        Session session = sessionFactory.openSession();
-        
+		log.debug("Opening session...");
+		System.out.println("Opening session");
+        Session session = Utils.sessionFactory.openSession();
+        Transaction tx = null;
+         
+        List<Recipe> recipes = new ArrayList<Recipe>();
         try
     	{
-	        Query q = session.createQuery("select _recipe from Recipe _recipe");
+        	System.out.println("Transaction");
+	        
+        	tx = session.beginTransaction();
+        	System.out.println("Lancement de la query");
 	         
-	        List<Recipe> recipes = q.list();
-	        log.debug("Reading recipes in database...");
-	        for (Recipe r : recipes) {
-	        	log.debug(String.format("#%s - %s :: takes %s minutes, costs %s €",
-	        			r.getId(), r.getDesignation(), r.getPrep_time(), (r.getTotal_price()/100)
-	        			));
+        	Query q = session.createQuery("select _recipe from Recipe _recipe");
+	        System.out.println("Query recuperee");
+	        
+	        
+	        recipes = q.list();
+	        System.out.println(recipes.size() + " items");
+	        
+	        for(Recipe r : recipes)
+	        {
+	        	System.out.println(r.getDesignation());
 	        }
-	        return recipes;
+	        
     	}
-    	catch(Exception e) {log.debug("Read: " + e.getMessage()); }
-        return null;
+        catch (RuntimeException e) {
+		    if (tx != null) tx.rollback();
+		    throw e; // or display error message
+		}
+		finally {
+		    session.close();
+		}
+        
+    	return recipes;
+	}
+	
+	public Recipe fetchRecipe(String recipe_name)
+	{
+		return null;
 	}
 	
 
