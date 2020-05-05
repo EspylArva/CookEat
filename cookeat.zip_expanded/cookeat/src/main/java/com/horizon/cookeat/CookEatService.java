@@ -147,4 +147,35 @@ public class CookEatService {
     	return recipes;
 	}
 	
+	public int computeTotalPrice(String recipe_name)
+	{
+        Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        int total_price = 0;
+        List<Ingredient> recipe_ingredients = null;  // AUTHORS ?
+        try
+    	{
+        	tx = session.beginTransaction();
+//        	String hql = String.format("select ri.quantity, i.price_per_unit, r.total_price from Ingredient as i right outer join RecipeIngredient as ri right outer join Recipe as r where r.designation = %s", recipe_name);
+        	String hql = String.format("select ri.quantity from Recipe as r right outer join r.list_ingredients as ri where r.designation = '%s'", recipe_name);
+        	@SuppressWarnings("unchecked")
+			Query<Object> q = session.createQuery(hql);
+        	
+        	for(Object obj : q.list())
+        	{
+        		System.out.println(obj.toString());
+        	}
+        	total_price = ((int)q.list().get(0))*((int)q.list().get(1));
+        	Query<Recipe> update = session.createQuery(String.format("update Recipe set total_price = %s where designation = %s", total_price, recipe_name));
+        	
+    	}
+        catch (RuntimeException e) {
+		    if (tx != null) tx.rollback();
+		    throw e;
+		}
+		finally { session.close(); }
+//    	return recipes;
+        return total_price;
+	}	
+	
 }

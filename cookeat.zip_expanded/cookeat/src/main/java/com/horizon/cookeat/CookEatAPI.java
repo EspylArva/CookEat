@@ -25,18 +25,20 @@ public class CookEatAPI {
 	   
 	@GetMapping("/fetch-all")
 	public List<Recipe> fetchAllRecipes() {
-		log.debug("Appel à l'API:");
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
-		log.debug("Fin d'appel à l'API");
 		return allRecipes;
 	}
 	
 	@GetMapping("/fetch/{recipe_name}")
 	public List<Recipe> fetchRecipe(@PathVariable String recipe_name) {
-		log.debug("Appel à l'API:");
 		List<Recipe> recipe = cookeat_services.fetchRecipe(recipe_name);
-		log.debug("Fin d'appel à l'API");
 		return recipe;
+	} 
+	
+	@GetMapping("/price/{recipe_name}")
+	public int computePrice(@PathVariable String recipe_name) {
+		int price = cookeat_services.computeTotalPrice(recipe_name);
+		return price ;
 	} 
 
 	@GetMapping("/filterBy/{Filter}/{Filter_value}")
