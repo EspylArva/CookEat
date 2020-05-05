@@ -5,6 +5,7 @@ import { Container } from '@material-ui/core';
 import './App.css';
 
 const Home = lazy(() => import('./routes/Home'));
+const Recipe = lazy(() => import('./routes/Recipe'));
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Container className="container">
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
+              <Route path = '/recipe' component={Recipe}/>
               <Route path ='/' component={Home} />
             </Switch>
           </Suspense>
