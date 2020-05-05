@@ -51,7 +51,7 @@ function RecipeCard({
   return (
     <div className={className}>
       <Card
-        elevation={10} 
+        elevation={5} 
         className={classes.root}
       >
         <CardMedia

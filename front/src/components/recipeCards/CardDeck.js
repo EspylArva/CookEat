@@ -10,11 +10,11 @@ const useStyle = makeStyles({
         transform: "translate(-50%, 0)",
         width: "100%",
         maxWidth: 450,
-        height: "calc(100% - 90px)",
+        height: "100%",
     }
 })
 
-function CardDeck({recipes}) {
+function CardDeck({recipes, className}) {
     const classes = useStyle();
 
     if(!recipes) {
@@ -22,9 +22,13 @@ function CardDeck({recipes}) {
     }
 
     return (
-        recipes.reverse().map(recipe => (
-            <RecipeCard className={classes.card} {...recipe} />
-        ))
+        <div className={className}>
+            {
+                [...recipes].reverse().map(recipe => (
+                    <RecipeCard className={classes.card} {...recipe} />
+                ))
+            }
+        </div>
     )
 }
 
