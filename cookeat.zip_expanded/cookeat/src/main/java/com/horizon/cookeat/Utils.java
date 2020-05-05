@@ -1,15 +1,16 @@
 package com.horizon.cookeat;
 
-import org.apache.commons.logging.Log;
+import javax.persistence.EntityManagerFactory;
+
+import org.apache.log4j.Logger;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.boot.logging.log4j2.Log4J2LoggingSystem;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 
 public class Utils {
 
-	public static final Logger log = LoggerFactory.getLogger(Utils.class);
-	
+	private final Logger log = Logger.getLogger(this.getClass());
 	public static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
+	
 }

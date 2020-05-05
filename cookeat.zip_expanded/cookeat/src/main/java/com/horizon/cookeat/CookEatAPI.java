@@ -2,8 +2,7 @@ package com.horizon.cookeat;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,9 +15,10 @@ import com.horizon.cookeat.entities.*;
 @RestController
 public class CookEatAPI {
 
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
+	private final Logger log = Logger.getLogger(this.getClass());
+	
 	@Autowired
-	private Services cookeat_services;
+	private CookEatService cookeat_services;
 	   
 	@GetMapping("/fetchall")
 	public List<Recipe> fetchAllRecipes() {
@@ -46,16 +46,7 @@ public class CookEatAPI {
 	@GetMapping("/update-pool/{pageNumber}")
 	public List<Recipe> updatePool(@PathVariable String pageNumber)
 	{
-		List<Recipe> newPool = null;
-		for(int i=1; i<10; i++)
-		{
-			newPool = cookeat_services.fetchPool(i);
-			for(Object recipe : newPool)
-			{
-				System.out.println(((Recipe)recipe).getDesignation());
-			}
-		}
-//		return newPool;
-		return null;
+		List<Recipe> newPool = cookeat_services.fetchPool(Integer.valueOf(pageNumber));
+		return newPool;
 	}
 }

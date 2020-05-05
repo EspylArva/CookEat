@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 
 @SpringBootApplication
-@EntityScan( basePackages = {"com.horizon.cookeat.model"} )
+//@EntityScan( basePackages = {"com.horizon.cookeat.model"} )
 public class CookeatApplication {
 
 	public static void main(String[] args) {

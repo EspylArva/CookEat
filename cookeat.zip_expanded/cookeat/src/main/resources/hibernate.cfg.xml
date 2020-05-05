@@ -22,14 +22,14 @@
         <property name="hibernate.hbm2ddl.auto">update</property>
         
         <!-- Annotated entity classes -->
-        <mapping class="com.horizon.cookeat.model.Ingredient"/>
-        <mapping class="com.horizon.cookeat.model.Equipment"/>
-        <mapping class="com.horizon.cookeat.model.Allergene"/>
-        <mapping class="com.horizon.cookeat.model.Gallery"/>
-        <mapping class="com.horizon.cookeat.model.Etape"/>
-        <mapping class="com.horizon.cookeat.model.Recipe"/>
+        <mapping class="com.horizon.cookeat.entities.Ingredient"/>
+        <mapping class="com.horizon.cookeat.entities.Equipment"/>
+        <mapping class="com.horizon.cookeat.entities.Allergene"/>
+        <mapping class="com.horizon.cookeat.entities.Gallery"/>
+        <mapping class="com.horizon.cookeat.entities.Etape"/>
+        <mapping class="com.horizon.cookeat.entities.Recipe"/>
         
-        <mapping class="com.horizon.cookeat.model.RecipeIngredient"/>
+        <mapping class="com.horizon.cookeat.entities.RecipeIngredient"/>
          
     </session-factory>
 </hibernate-configuration>

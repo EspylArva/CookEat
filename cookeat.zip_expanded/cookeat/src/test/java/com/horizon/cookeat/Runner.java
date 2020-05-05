@@ -2,13 +2,14 @@ package com.horizon.cookeat;
 
 import java.util.List;
 
+import javax.persistence.EntityManagerFactory;
 
+import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.horizon.cookeat.entities.Equipment;
 import com.horizon.cookeat.entities.Etape;
@@ -19,8 +20,9 @@ import com.horizon.cookeat.entities.Recipe;
 
 public class Runner {
 	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
-    
+	private final Logger log = Logger.getLogger(this.getClass());
+	private EntityManagerFactory entityManagerFactory;
+	
     @Test
     public void crud() {
     	
@@ -30,7 +32,8 @@ public class Runner {
     		// Create template data:	https://www.mockaroo.com/
 //	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 	    	log.debug("Opening session...");
-	        Session session = Utils.sessionFactory.openSession();
+	    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+//	        Session session = Utils.sessionFactory.openSession();
 	        Transaction tx = null;
 	        log.debug("Session opened");
 	        log.debug("Creating recipes...");
@@ -75,7 +78,8 @@ public class Runner {
     }
  
     private void create() {
-    	Session session = Utils.sessionFactory.openSession();
+    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+//    	Session session = Utils.sessionFactory.openSession();
     	Transaction tx = null;
     	try
     	{
@@ -253,7 +257,8 @@ public class Runner {
     }
      
     private void read() {
-    	Session session = Utils.sessionFactory.openSession();
+    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
+//    	Session session = Utils.sessionFactory.openSession();
     	Transaction tx = null;
     	try
     	{	
