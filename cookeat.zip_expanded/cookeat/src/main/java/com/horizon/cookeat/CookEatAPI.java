@@ -17,10 +17,13 @@ public class CookEatAPI {
 
 	private final Logger log = Logger.getLogger(this.getClass());
 	
+//	@Autowired
+//	private RecipeRepository repo;
+	
 	@Autowired
 	private CookEatService cookeat_services;
 	   
-	@GetMapping("/fetchall")
+	@GetMapping("/fetch-all")
 	public List<Recipe> fetchAllRecipes() {
 		log.debug("Appel à l'API:");
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
@@ -36,8 +39,8 @@ public class CookEatAPI {
 		return recipe;
 	} 
 
-	@GetMapping("/fetchAll/filterBy/{Filter}/{Filter_value}")
-	public List<Recipe> fetchAllRecipesFilteredBy(@PathVariable String Filter, @PathVariable String Filter_value)
+	@GetMapping("/filterBy/{Filter}/{Filter_value}")
+	public List<Recipe> fetchAllRecipesFilteredBy(@PathVariable(name="Filter") String Filter, @PathVariable(name="Filter_value") Object Filter_value)
 	{
 		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(Filter.toUpperCase()), Filter_value);
 		return recipes;

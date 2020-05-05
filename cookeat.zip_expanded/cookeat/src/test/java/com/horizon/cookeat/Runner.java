@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.junit.jupiter.api.Test;
 
@@ -21,7 +22,8 @@ import com.horizon.cookeat.entities.Recipe;
 public class Runner {
 	
 	private final Logger log = Logger.getLogger(this.getClass());
-	private EntityManagerFactory entityManagerFactory;
+//	private EntityManagerFactory entityManagerFactory;
+	private SessionFactory sessionFactory = new Configuration().configure("generator.cfg.xml").buildSessionFactory();
 	
     @Test
     public void crud() {
@@ -30,10 +32,8 @@ public class Runner {
     	{
     		// DB at: 					http://127.0.0.1:59843/browser/#
     		// Create template data:	https://www.mockaroo.com/
-//	    	SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
 	    	log.debug("Opening session...");
-	    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-//	        Session session = Utils.sessionFactory.openSession();
+	        Session session = sessionFactory.openSession();
 	        Transaction tx = null;
 	        log.debug("Session opened");
 	        log.debug("Creating recipes...");
@@ -78,8 +78,7 @@ public class Runner {
     }
  
     private void create() {
-    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-//    	Session session = Utils.sessionFactory.openSession();
+    	Session session = sessionFactory.openSession();
     	Transaction tx = null;
     	try
     	{
@@ -257,8 +256,7 @@ public class Runner {
     }
      
     private void read() {
-    	Session session = entityManagerFactory.unwrap(SessionFactory.class).openSession();
-//    	Session session = Utils.sessionFactory.openSession();
+    	Session session = sessionFactory.openSession();
     	Transaction tx = null;
     	try
     	{	
