@@ -98,10 +98,7 @@ public class CookEatService {
     		q.setFirstResult((pageNumber - 1) * pageSize);
             q.setMaxResults(pageSize);
         	recipes = q.list();
-        	for(Object o : recipes)
-        	{
-        		System.out.println(o.toString());
-        	}
+
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -111,7 +108,7 @@ public class CookEatService {
     	return recipes;
 	}
 
-	public List<Recipe> fetchAllRecipesFilteredBy(Filter filter, int filterValue)
+	public List<Recipe> fetchAllRecipesFilteredBy(Filter filter, Object filterValue)
 	{
 		Session session = Utils.sessionFactory.openSession();
         Transaction tx = null;
@@ -123,10 +120,14 @@ public class CookEatService {
         	switch(filter)
     		{
     			case PRICE:
+    				hqlFilter = String.format("where _recipe.total_price <= %s", (int)filterValue);
     				break;
     			case ALLERGY:
+    				// TODO: To be implemented. See com.horizon.cookeat.entities.allergene and tags
+//    				hqlFilter = String.format("where _recipe.total_price <= %s", filterValue);
     				break;
     			case DIET:
+    				// TODO: To be implemented. See com.horizon.cookeat.entities.allergene and tags
     				break;
     			default:
     				// No filter, return error //

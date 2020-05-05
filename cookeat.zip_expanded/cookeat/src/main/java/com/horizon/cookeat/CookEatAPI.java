@@ -39,8 +39,8 @@ public class CookEatAPI {
 	@GetMapping("/fetchAll/filterBy/{Filter}/{Filter_value}")
 	public List<Recipe> fetchAllRecipesFilteredBy(@PathVariable String Filter, @PathVariable String Filter_value)
 	{
-		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(Filter.toUpperCase()), Integer.valueOf(Filter_value));
-		return null;
+		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(Filter.toUpperCase()), Filter_value);
+		return recipes;
 	}
 	
 	@GetMapping("/update-pool/{pageNumber}")
