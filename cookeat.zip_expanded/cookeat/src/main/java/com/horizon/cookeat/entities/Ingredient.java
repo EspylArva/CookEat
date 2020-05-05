@@ -2,6 +2,7 @@
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,8 +17,17 @@ import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+
 @Entity
 @Table(name="ingredient")
+@NaturalIdCache
+@Cache(
+    usage = CacheConcurrencyStrategy.READ_WRITE
+)
 public class Ingredient {
 	
 	
@@ -26,8 +36,9 @@ public class Ingredient {
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ingredient_generator")
 	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize = 100)
 	private int id;
-	private String unit;
+	@NaturalId
 	private String designation;
+	private String unit;
 	private int price_per_unit;
 	
 	@OneToMany(
@@ -55,7 +66,7 @@ public class Ingredient {
  
     @Override
     public int hashCode() {
-        return id;
+        return Objects.hash(designation);
     }
 	
 	// CONSTRUCTOR //
@@ -77,9 +88,9 @@ public class Ingredient {
 	{
 		list_allergenes.remove(a);
 	}
-	public void addRecipe(Recipe r)
+	public void addRecipe(Recipe r, int quantity)
 	{
-		RecipeIngredient join = new RecipeIngredient(r, this);
+		RecipeIngredient join = new RecipeIngredient(r, this, quantity);
 		list_recipes.add(join);
 	}
 	public void removeRecipe(Recipe r)

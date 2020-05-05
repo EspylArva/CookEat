@@ -46,7 +46,7 @@ public class CookEatService {
 	}
 	
 
-	public List<Recipe> fetchRecipe(String recipe_name)
+	public List<Recipe> fetchRecipe(int recipe_id)
 	{
         Session session = sessionFactory.openSession();
         Transaction tx = null;
@@ -54,7 +54,7 @@ public class CookEatService {
         try
     	{
         	tx = session.beginTransaction();
-        	String hql = String.format("select _recipe from Recipe _recipe where lower(_recipe.designation)=lower('%s')", recipe_name);
+        	String hql = String.format("select _recipe from Recipe _recipe where _recipe.id='%s'", recipe_id);
 //        	String hql = "select _recipe from Recipe as _recipe";
         	@SuppressWarnings("unchecked")
 			Query<Recipe> q = session.createQuery(hql);
@@ -80,9 +80,8 @@ public class CookEatService {
 //	    return allQuery.getResultList();
 //	}
 	
-	public List<Recipe> fetchPool(int pageNumber)
+	public List<Recipe> fetchPool(int pageNumber, int quantity)
 	{
-		int pageSize = 10;
         Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
@@ -92,8 +91,8 @@ public class CookEatService {
         	String hql = "select _recipe from Recipe as _recipe";
         	@SuppressWarnings("unchecked")
 			Query<Recipe> q = session.createQuery(hql);
-    		q.setFirstResult((pageNumber - 1) * pageSize);
-            q.setMaxResults(pageSize);
+    		q.setFirstResult(pageNumber - 100); // 100 : starting index of recipes
+            q.setMaxResults(quantity);
         	recipes = q.list();
 
     	}
@@ -147,35 +146,36 @@ public class CookEatService {
     	return recipes;
 	}
 	
-	public int computeTotalPrice(String recipe_name)
+	public int computeTotalPrice(int recipe_id)
 	{
-        Session session = sessionFactory.openSession();
+		int total_price = 0;
+        for(Ingredient ing : getIngredients(recipe_id))
+        {
+        	total_price += ing.getPrice();
+        }
+        return total_price;
+	}
+	
+	public List<Ingredient> getIngredients(int recipe_id)
+	{
+		Session session = sessionFactory.openSession();
         Transaction tx = null;
-        int total_price = 0;
-        List<Ingredient> recipe_ingredients = null;  // AUTHORS ?
+        List<Ingredient> ingredients = null;  
         try
     	{
         	tx = session.beginTransaction();
-//        	String hql = String.format("select ri.quantity, i.price_per_unit, r.total_price from Ingredient as i right outer join RecipeIngredient as ri right outer join Recipe as r where r.designation = %s", recipe_name);
-        	String hql = String.format("select ri.quantity from Recipe as r right outer join r.list_ingredients as ri where r.designation = '%s'", recipe_name);
+        	String sql = String.format("SELECT * FROM ingredient INNER JOIN recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient_id WHERE recipe_ingredient.recipe_id = %s", recipe_id);
         	@SuppressWarnings("unchecked")
-			Query<Object> q = session.createQuery(hql);
-        	
-        	for(Object obj : q.list())
-        	{
-        		System.out.println(obj.toString());
-        	}
-        	total_price = ((int)q.list().get(0))*((int)q.list().get(1));
-        	Query<Recipe> update = session.createQuery(String.format("update Recipe set total_price = %s where designation = %s", total_price, recipe_name));
-        	
+//			Query<Ingredient> q = session.createQuery(hql, Ingredient.class);
+			Query<Ingredient> q = session.createSQLQuery(sql);
+        	ingredients = q.list();
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
 		    throw e;
 		}
 		finally { session.close(); }
-//    	return recipes;
-        return total_price;
-	}	
+    	return ingredients;
+	}
 	
 }

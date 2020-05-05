@@ -23,21 +23,21 @@ public class CookEatAPI {
 	@Autowired
 	private CookEatService cookeat_services;
 	   
-	@GetMapping("/fetch-all")
+	@GetMapping("/get/recipe/all")
 	public List<Recipe> fetchAllRecipes() {
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
 		return allRecipes;
 	}
 	
-	@GetMapping("/fetch/{recipe_name}")
-	public List<Recipe> fetchRecipe(@PathVariable String recipe_name) {
-		List<Recipe> recipe = cookeat_services.fetchRecipe(recipe_name);
+	@GetMapping("/get/recipe/{recipe_id}")
+	public List<Recipe> fetchRecipe(@PathVariable String recipe_id) {
+		List<Recipe> recipe = cookeat_services.fetchRecipe(Integer.valueOf(recipe_id));
 		return recipe;
 	} 
 	
-	@GetMapping("/price/{recipe_name}")
-	public int computePrice(@PathVariable String recipe_name) {
-		int price = cookeat_services.computeTotalPrice(recipe_name);
+	@GetMapping("/get/recipe/price/{recipe_id}")
+	public int computePrice(@PathVariable String recipe_id) {
+		int price = cookeat_services.computeTotalPrice(Integer.valueOf(recipe_id));
 		return price ;
 	} 
 
@@ -48,10 +48,18 @@ public class CookEatAPI {
 		return recipes;
 	}
 	
-	@GetMapping("/update-pool/{pageNumber}")
-	public List<Recipe> updatePool(@PathVariable String pageNumber)
+	@GetMapping("/get/recipe/{pageNumber}/{quantity}")
+	public List<Recipe> updatePool(@PathVariable String pageNumber, @PathVariable String quantity)
 	{
-		List<Recipe> newPool = cookeat_services.fetchPool(Integer.valueOf(pageNumber));
+		List<Recipe> newPool = cookeat_services.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity));
 		return newPool;
 	}
+	
+	@GetMapping("/get/ingredient/{recette_id}")
+	public List<Ingredient> getIngredient(@PathVariable String recette_id)
+	{
+		List<Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
+		return ingredients;
+	}
+	
 }

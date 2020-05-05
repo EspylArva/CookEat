@@ -110,20 +110,23 @@ public class Runner {
         	Gallery g3 = new Gallery("pathToImage3", "Pates a la carbonara facon Baptiste");
         	
 	        
-	        patesCarbo.addIngredient(patrick);
-	        patesCarbo.addIngredient(JIMMYon);
+	        patesCarbo.addIngredient(patrick, 2);
+	        patesCarbo.addIngredient(JIMMYon, 1);
 	        patesCarbo.addEquipment(dominatrixTool);
 	        patesCarbo.addEquipment(sacreCULyere);
 
 	        patesCarbo.addStep(s1);patesCarbo.addStep(s2);patesCarbo.addStep(s3);
 	        patesCarbo.addGallery(g1);patesCarbo.addGallery(g2);patesCarbo.addGallery(g3);
 	        
-	        tarteAuxPomXML.addIngredient(pomXML);
+	        tarteAuxPomXML.addIngredient(pomXML,5);
 	        tarteAuxPomXML.addEquipment(sacreCULyere);
 	        
-	        trucDegueu.addIngredient(JIMMYon);
+	        trucDegueu.addIngredient(JIMMYon, 3);
 	        trucDegueu.addEquipment(sacreCULyere);
-	        	        
+
+	        session.save(patesCarbo);
+	        session.save(tarteAuxPomXML);
+	        session.save(trucDegueu);
 	        session.save(new Recipe("Fletcher Bryant",29,35,"925-5526 Eu, Av."));
 	        session.save(new Recipe("Kieran Vargas",58,38,"5681 Fusce Rd."));
 	        session.save(new Recipe("Alan Oliver",127,22,"P.O. Box 136, 2655 Tellus St."));
@@ -221,19 +224,14 @@ public class Runner {
 	        session.save(new Recipe("Salvador Herring",87,3,"390-3931 Duis St."));
 	        session.save(new Recipe("Steel Brewer",143,50,"Ap #157-2799 Massa. Rd."));
 	        session.save(new Recipe("Elton Pena",195,17,"389-2104 Rutrum Street"));
-	        session.save(new Recipe("Bruce Irwin",179,49,"3103 Ipsum St."));
-	        session.save(new Recipe("Oscar Olson",49,43,"1582 Tempus St."));
-	        session.save(new Recipe("Kaseem Hester",165,47,"P.O. Box 134, 8096 Donec Ave"));
-    		session.save(JIMMYon);
-    		session.save(pomXML);
+    		
+	        session.save(JIMMYon);
+	        session.save(pomXML);
 	        session.save(patrick);
+
 	        
 	        session.save(sacreCULyere);
 	        session.save(dominatrixTool);
-	        
-	        session.save(patesCarbo);
-	        session.save(tarteAuxPomXML);
-	        session.save(trucDegueu);
 	        
 	        session.save(s1);
 	        session.save(s2);

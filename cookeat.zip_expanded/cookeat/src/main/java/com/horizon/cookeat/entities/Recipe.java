@@ -1,11 +1,10 @@
 package com.horizon.cookeat.entities;
 
-import java.io.Serializable;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Map.Entry;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -16,13 +15,21 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.MapKey;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalId;
+import org.hibernate.annotations.NaturalIdCache;
+
 @Entity
 @Table(name="recipe")
+@NaturalIdCache
+@Cache(
+    usage = CacheConcurrencyStrategy.READ_WRITE
+)
 public class Recipe// implements Serializable
 {
 	// ATTRIBUTES //
@@ -30,6 +37,7 @@ public class Recipe// implements Serializable
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")
 	@SequenceGenerator(name="recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize = 100)
 	private int id;
+	@NaturalId
 	private String designation;
 	private int prep_time;
 	private int total_price;
@@ -66,9 +74,9 @@ public class Recipe// implements Serializable
         return id == ((Recipe)o).getId();
     }
  
-    @Override
+	@Override
     public int hashCode() {
-        return id;
+        return Objects.hash(designation);
     }
 	
 	// CONSTRUCTOR //
@@ -82,16 +90,16 @@ public class Recipe// implements Serializable
 		this.path_to_icon = path_icon;
 	}
 	
-	public Recipe(String designation, int prep_time, int total_price, String path_icon, List<Ingredient> ingredients)
+	public Recipe(String designation, int prep_time, int total_price, String path_icon, Map<Ingredient, Integer> ingredients)
 	{
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
 		this.path_to_icon = path_icon;
 		
-		for(Ingredient ingredient : ingredients)
+		for(Entry<Ingredient, Integer> entry : ingredients.entrySet())
 		{
-			addIngredient(ingredient);
+			addIngredient(entry.getKey(), entry.getValue());
 		}
 	}
 	
@@ -131,9 +139,9 @@ public class Recipe// implements Serializable
 		list_equipments.remove(equipment);
 	}
 	
-	public void addIngredient(Ingredient i)
+	public void addIngredient(Ingredient i, int quantity)
 	{
-		RecipeIngredient join = new RecipeIngredient(this, i);
+		RecipeIngredient join = new RecipeIngredient(this, i, quantity);
 		list_ingredients.add(join);
 	}
 	

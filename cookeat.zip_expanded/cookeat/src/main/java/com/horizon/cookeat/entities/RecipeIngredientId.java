@@ -11,6 +11,11 @@ public class RecipeIngredientId implements Serializable
 {
 	// ATTRIBUTES //
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 760531323727687340L;
+
 	@Column(name = "recipeId")
     private int recipeId;
  
@@ -28,12 +33,18 @@ public class RecipeIngredientId implements Serializable
         return Objects.equals(recipeId, that.recipeId) && Objects.equals(ingredientId, that.ingredientId);
     }
     
+    @Override
+    public int hashCode() {
+        return Objects.hash(recipeId, ingredientId);
+    }
+    
     
     // CONSTRUCTOR //
     public RecipeIngredientId() {}
     
     public RecipeIngredientId(int r_id, int i_id)
     {
+      System.out.println(r_id + "-" + i_id);
     	this.recipeId = r_id;
     	this.ingredientId = i_id;
     }

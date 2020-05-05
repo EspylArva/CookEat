@@ -1,5 +1,6 @@
 package com.horizon.cookeat.entities;
 
+import java.io.Serializable;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -12,10 +13,15 @@ import javax.persistence.Table;
 
 @Entity(name = "RecipeIngredient")
 @Table(name = "recipe_ingredient")
-public class RecipeIngredient {
+public class RecipeIngredient implements Serializable{
 	
 	// ATTRIBUTES //
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@EmbeddedId
     private RecipeIngredientId id;
 	
@@ -52,10 +58,12 @@ public class RecipeIngredient {
     // CONSTRUCTOR //
     public RecipeIngredient() {}
     
-    public RecipeIngredient(Recipe r, Ingredient i) {
+    public RecipeIngredient(Recipe r, Ingredient i, int quantity) {
         this.recipe = r;
         this.ingredient = i;
+
         this.id = new RecipeIngredientId(r.getId(), i.getId());
+        this.quantity = quantity;
     }
     
     
