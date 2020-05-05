@@ -19,21 +19,9 @@ public class CookEatAPI {
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	private Services cookeat_services;
-	
-//	@GetMapping("/instructors/{username}/courses")
-//	public List<Course> getAllCourses(@PathVariable String username) {
-//		System.out.println("GETTING ALL COURSES FOR USERNAME " + username);
-//		return courseManagementService.findAll(username);
-//	}
-	  
-	@GetMapping("/test")
-	public String ok() {
-		return "TEST OK";
-	}
 	   
-	@GetMapping("/fetch/all")
+	@GetMapping("/fetchall")
 	public List<Recipe> fetchAllRecipes() {
-		System.out.println("Appel à l'API:");
 		log.debug("Appel à l'API:");
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
 		log.debug("Fin d'appel à l'API");
@@ -41,12 +29,33 @@ public class CookEatAPI {
 	}
 	
 	@GetMapping("/fetch/{recipe_name}")
-	public Recipe fetchRecipe(@PathVariable String recipeName) {
+	public List<Recipe> fetchRecipe(@PathVariable String recipe_name) {
 		log.debug("Appel à l'API:");
-		Recipe recipe = cookeat_services.fetchRecipe(recipeName);
+		List<Recipe> recipe = cookeat_services.fetchRecipe(recipe_name);
 		log.debug("Fin d'appel à l'API");
 		return recipe;
 	} 
-	  
 
+	@GetMapping("/fetchAll/filterBy/{Filter}/{Filter_value}")
+	public List<Recipe> fetchAllRecipesFilteredBy(@PathVariable String Filter, @PathVariable String Filter_value)
+	{
+		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(Filter.toUpperCase()), Integer.valueOf(Filter_value));
+		return null;
+	}
+	
+	@GetMapping("/update-pool/{pageNumber}")
+	public List<Recipe> updatePool(@PathVariable String pageNumber)
+	{
+		List<Recipe> newPool = null;
+		for(int i=1; i<10; i++)
+		{
+			newPool = cookeat_services.fetchPool(i);
+			for(Object recipe : newPool)
+			{
+				System.out.println(((Recipe)recipe).getDesignation());
+			}
+		}
+//		return newPool;
+		return null;
+	}
 }

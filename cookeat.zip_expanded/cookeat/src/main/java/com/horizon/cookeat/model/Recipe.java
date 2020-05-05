@@ -23,8 +23,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="recipe")
-public class Recipe implements Serializable{
-	
+public class Recipe implements Serializable
+{
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")
@@ -72,17 +72,7 @@ public class Recipe implements Serializable{
     }
 	
 	// CONSTRUCTOR //
-    public Recipe()
-    {
-    	this.designation = "";
-		this.prep_time = 0;
-		this.total_price = 0;
-		this.path_to_icon = "";
-		list_equipments = new HashSet<Equipment>();
-		list_gallery = new HashSet<Gallery>();
-		list_ingredients = new HashSet<RecipeIngredient>();
-		list_steps = new HashSet<Etape>();
-    }
+    public Recipe(){    }
     
 	public Recipe(String designation, int prep_time, int total_price, String path_icon)
 	{

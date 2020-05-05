@@ -45,22 +45,36 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		
+		<!-- HIBERNATE -->
+<!-- 		<dependency> -->
+<!-- 		  <groupId>org.hibernate</groupId> -->
+<!-- 		  <artifactId>hibernate-agroal</artifactId> -->
+<!-- 		  <version>5.4.14.Final</version> -->
+<!-- 		  <type>pom</type> -->
+<!-- 		</dependency> -->
 		<dependency>
-		  <groupId>org.hibernate</groupId>
-		  <artifactId>hibernate-agroal</artifactId>
-		  <version>5.4.14.Final</version>
-		  <type>pom</type>
+	      <groupId>org.hibernate</groupId>
+	      <artifactId>hibernate-entitymanager</artifactId>
+	      <version>5.4.15.Final</version>
+	    </dependency>
+	    <dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-core</artifactId>
+		    <version>5.4.15.Final</version>
 		</dependency>
 		<dependency>
-	      <groupId>hibernate</groupId>
-	      <artifactId>hibernate-entitymanager</artifactId>
-	      <version>3.4.0.GA</version>
-	    </dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-annotations</artifactId>
+		    <version>3.5.6-Final</version>
+		</dependency>
+		
+		<!-- POSTGRESQL -->
 	 
 	    <dependency>
 	      <groupId>org.postgresql</groupId>
 	      <artifactId>postgresql</artifactId>
-	      <version>42.2.2.jre7</version>
+	      <version>42.2.11</version>
 	    </dependency>
 	 
 	    <dependency>

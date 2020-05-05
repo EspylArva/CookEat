@@ -12,7 +12,4 @@ public class Utils {
 	public static final Logger log = LoggerFactory.getLogger(Utils.class);
 	
 	public static final SessionFactory sessionFactory = new Configuration().configure().buildSessionFactory();
-	
-
-	
 }
