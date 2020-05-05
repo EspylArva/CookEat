@@ -1,4 +1,4 @@
-	package com.horizon.cookeat.model;
+	package com.horizon.cookeat.entities;
 
 import java.util.HashSet;
 import java.util.Iterator;

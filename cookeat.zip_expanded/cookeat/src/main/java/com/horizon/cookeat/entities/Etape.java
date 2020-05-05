@@ -1,4 +1,4 @@
-package com.horizon.cookeat.model;
+package com.horizon.cookeat.entities;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,60 +10,59 @@ import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="gallery")
-public class Gallery {
-	 // ATTRIBUTES //
+@Table(name="etape")
+public class Etape {
+	// ATTRIBUTES //
 	@Id
-	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gallery_generator")
-	@SequenceGenerator(name="gallery_generator", sequenceName = "gallery_seq", initialValue = 700, allocationSize = 100)
+	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "etape_generator")
+	@SequenceGenerator(name="etape_generator", sequenceName = "etape_seq", initialValue = 1000, allocationSize = 100)
 	private int id;
-	private String path;
+	private int step_order;
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	private Recipe recipe;
-	
+
 	// METHODS //
 	@Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Gallery )) return false;
-        return id == ((Gallery) o).getId();
+        if (!(o instanceof Etape )) return false;
+        return id == ((Etape) o).getId();
     }
  
     @Override
     public int hashCode() {
         return id;
     }
-
+	
 	// CONSTRUCTOR //
-    public Gallery() {}
+    public Etape() {}
     
-	public Gallery(String path, String description)
+	public Etape(int step_order, String description)
 	{
-		this.path = path;
+		this.step_order = step_order;
 		this.description = description;
 	}
 	
-	// GETTERS AND SETTERS //	
-	public Recipe getRecipe() {
-		return recipe;
-	}
-	
-	public void setRecipe(Recipe recipe) {
-		this.recipe = recipe;
-	}
+	// GETTERS AND SETTERS //
 	public int getId() {
 		return id;
 	}
 	public void setId(int id) {
 		this.id = id;
 	}
-	public String getPath() {
-		return path;
+	public Recipe getRecipe() {
+		return recipe;
 	}
-	public void setPath(String path) {
-		this.path = path;
+	public void setRecipe(Recipe recipe) {
+		this.recipe = recipe;
+	}
+	public int getOrder() {
+		return step_order;
+	}
+	public void setOrder(int step_order) {
+		this.step_order = step_order;
 	}
 	public String getDescription() {
 		return description;
@@ -72,4 +71,7 @@ public class Gallery {
 		this.description = description;
 	}
 	
+	
+	
+
 }

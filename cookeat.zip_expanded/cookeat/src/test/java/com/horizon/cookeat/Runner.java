@@ -10,11 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.horizon.cookeat.model.Equipment;
-import com.horizon.cookeat.model.Etape;
-import com.horizon.cookeat.model.Gallery;
-import com.horizon.cookeat.model.Ingredient;
-import com.horizon.cookeat.model.Recipe;
+import com.horizon.cookeat.entities.Equipment;
+import com.horizon.cookeat.entities.Etape;
+import com.horizon.cookeat.entities.Gallery;
+import com.horizon.cookeat.entities.Ingredient;
+import com.horizon.cookeat.entities.Recipe;
 
 
 public class Runner {

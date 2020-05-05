@@ -1,4 +1,4 @@
-package com.horizon.cookeat.model;
+package com.horizon.cookeat.entities;
 
 import java.io.Serializable;
 import java.util.HashMap;
@@ -23,7 +23,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="recipe")
-public class Recipe implements Serializable
+public class Recipe// implements Serializable
 {
 	// ATTRIBUTES //
 	@Id

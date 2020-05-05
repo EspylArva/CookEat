@@ -24,7 +24,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.horizon.cookeat.model.Recipe;
+import com.horizon.cookeat.entities.Recipe;
 
 @Service
 public class Services {
