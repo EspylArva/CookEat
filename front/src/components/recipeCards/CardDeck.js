@@ -24,8 +24,8 @@ function CardDeck({recipes, className}) {
     return (
         <div className={className}>
             {
-                [...recipes].reverse().map(recipe => (
-                    <RecipeCard className={classes.card} {...recipe} />
+                [...recipes].reverse().map((recipe, index) => (
+                    <RecipeCard key={index} className={classes.card} {...recipe} />
                 ))
             }
         </div>

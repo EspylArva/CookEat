@@ -10,11 +10,11 @@ const useStyle = makeStyles({
 })
 
 
-function RoundButton({ children, height, color, backgroundColor }) {
+function RoundButton({ children, height, color, backgroundColor, onClick }) {
     const classes = useStyle();
 
     return (
-        <IconButton style={{height: height, width: height, backgroundColor, color}} className={classes.button} aria-label="delete">
+        <IconButton onClick={onClick} style={{height: height, width: height, backgroundColor, color}} className={classes.button} aria-label="delete">
             { children }
         </IconButton>
     )

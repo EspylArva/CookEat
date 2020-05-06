@@ -1,10 +1,10 @@
-import React from 'react';
-import IconButton from '@material-ui/core/IconButton';
+import React, { useContext } from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LocalDiningIcon from '@material-ui/icons/LocalDining';
 import RoundButton from './RoundButton';
 import { makeStyles } from '@material-ui/core/styles';
-import { red, green } from '@material-ui/core/colors';
+import { ReceipesContext } from '../../contexts/Recipes/Recipes';
+import { PASS } from '../../contexts/Recipes/searchReducer';
 
 const useStyle = makeStyles({
     root: {
@@ -22,13 +22,24 @@ const useStyle = makeStyles({
 
 function MatchButtons({ className, height }) {
     const classes = useStyle();
+    const { searchDispatch } = useContext(ReceipesContext);
 
     return (
         <div style={{height: height}} className={`${classes.root} ${className}`}>
-            <RoundButton backgroundColor="red" color="white" height={height}>
+            <RoundButton
+                onClick={() => searchDispatch({ type: PASS })}
+                backgroundColor="red" 
+                color="white"
+                height={height}
+            >
                 <DeleteIcon fontSize="large" />
             </RoundButton>
-            <RoundButton backgroundColor="green" color="white" height={height}>
+            <RoundButton
+                onClick={() => searchDispatch({ type: PASS })}
+                backgroundColor="green"
+                color="white"
+                height={height}
+            >
                 <LocalDiningIcon fontSize="large" />
             </RoundButton>
         </div>

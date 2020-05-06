@@ -21,9 +21,7 @@ const useStyles = makeStyles({
 
 function Search() {
     const classes = useStyles();
-    const { searchState } = useContext(ReceipesContext)
-
-    console.log(searchState)
+    const { searchState } = useContext(ReceipesContext);
 
     return (
         <div className={classes.root}>
