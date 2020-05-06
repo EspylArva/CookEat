@@ -4,10 +4,13 @@ import './index.css';
 import 'typeface-roboto';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import { ReceipesProvider } from './contexts/Recipes/Recipes';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <ReceipesProvider>
+      <App />
+    </ReceipesProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
