@@ -1,20 +1,24 @@
 import React, { useContext } from 'react';
-import { List, ListItem, ListItemText } from '@material-ui/core';
+import { List } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 import { ReceipesContext } from '../../contexts/Recipes/Recipes';
+import BasketItem from './BasketItem';
 
 function BasketList() {
     const { basketState } = useContext(ReceipesContext);
+
+    if(!basketState.basket || !basketState.basket.length) {
+        return (
+            <em>Vous n'avez pas de recette dans votre panier. <Link to="/search">Vous pouvez aller matcher ici</Link></em>
+        )
+    }
 
     return (
         <React.Fragment>
             <List>
                 {
                     basketState.basket.map((recipe, index) => (
-                        <ListItem key={index}>
-                            <ListItemText
-                                primary={recipe.designation}
-                            />
-                        </ListItem>
+                        <BasketItem key={index} {...recipe} />
                     ))
                 }
             </List>
