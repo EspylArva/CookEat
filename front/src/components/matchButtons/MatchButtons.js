@@ -1,10 +1,11 @@
 import React, { useContext } from 'react';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LocalDiningIcon from '@material-ui/icons/LocalDining';
+import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
 import RoundButton from './RoundButton';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { ReceipesContext } from '../../contexts/Recipes/Recipes';
-import { like, dislike } from '../../contexts/Recipes/searchReducer';
 
 const useStyle = makeStyles({
     root: {
@@ -22,7 +23,7 @@ const useStyle = makeStyles({
 
 function MatchButtons({ className, height }) {
     const classes = useStyle();
-    const { searchDispatch, actions } = useContext(ReceipesContext);
+    const { actions } = useContext(ReceipesContext);
 
     return (
         <div style={{height: height}} className={`${classes.root} ${className}`}>
@@ -34,6 +35,17 @@ function MatchButtons({ className, height }) {
             >
                 <DeleteIcon fontSize="large" />
             </RoundButton>
+            <Link
+                to="/basket"
+            >
+                <RoundButton
+                    backgroundColor="orange" 
+                    color="white"
+                    height={"50px"}
+                >
+                    <ShoppingBasketOutlinedIcon />
+                </RoundButton>
+            </Link>
             <RoundButton
                 onClick={() => actions.like()}
                 backgroundColor="green"

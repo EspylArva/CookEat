@@ -6,6 +6,7 @@ import './App.css';
 
 const Home = lazy(() => import('./routes/Home'));
 const Search = lazy(() => import('./routes/Search'));
+const Basket = lazy(() => import('./routes/Basket'));
 
 
 function App() {
@@ -17,6 +18,7 @@ function App() {
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path='/search' component={Search} />
+              <Route path='/basket' component={Basket} />
               <Route path ='/' component={Home} />
             </Switch>
           </Suspense>
