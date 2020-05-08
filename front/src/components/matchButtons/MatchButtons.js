@@ -22,12 +22,12 @@ const useStyle = makeStyles({
 
 function MatchButtons({ className, height }) {
     const classes = useStyle();
-    const { searchDispatch } = useContext(ReceipesContext);
+    const { searchDispatch, actions } = useContext(ReceipesContext);
 
     return (
         <div style={{height: height}} className={`${classes.root} ${className}`}>
             <RoundButton
-                onClick={() => searchDispatch(dislike())}
+                onClick={() => actions.dislike()}
                 backgroundColor="red" 
                 color="white"
                 height={height}
@@ -35,7 +35,7 @@ function MatchButtons({ className, height }) {
                 <DeleteIcon fontSize="large" />
             </RoundButton>
             <RoundButton
-                onClick={() => searchDispatch(like())}
+                onClick={() => actions.like()}
                 backgroundColor="green"
                 color="white"
                 height={height}

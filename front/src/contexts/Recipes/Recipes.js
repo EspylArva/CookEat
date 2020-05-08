@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from 'react';
-import searchReducer from './searchReducer';
+import searchReducer, { like as searchLike, dislike as searchDislike } from './searchReducer';
+import basketReducer, { add } from './basketReducer';
 
 export const ReceipesContext = createContext();
 
@@ -44,9 +45,27 @@ export function ReceipesProvider({ children }) {
         ],
         liked: false,
     });
+    const [basketState, basketDispatch] = useReducer(basketReducer, {
+        basket: [],
+    });
+
+    const like = () => {
+        const recipe = searchState.recipes[0];
+        searchDispatch(searchLike());
+        basketDispatch(add(recipe));
+    }
+
+    const dislike = () => {
+        searchDispatch(searchDislike());
+    }
+
+    const actions = {
+        like,
+        dislike
+    }
 
     return (
-        <ReceipesContext.Provider value={{ searchState, searchDispatch }}>
+        <ReceipesContext.Provider value={{ searchState, searchDispatch, basketState, basketDispatch, actions }}>
             { children }
         </ReceipesContext.Provider>
     )
