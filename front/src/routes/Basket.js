@@ -1,24 +1,13 @@
-import React, { useContext } from 'react';
-import { List, ListItem, ListItemText } from '@material-ui/core';
-import { ReceipesContext } from '../contexts/Recipes/Recipes';
+import React from 'react';
+import BasketList from '../components/basket/BasketList';
 
 function Basket() {
-    const { basketState } = useContext(ReceipesContext);
+    
 
     return (
         <React.Fragment>
             <h1>Panier</h1>
-            <List>
-                {
-                    basketState.basket.map((recipe, index) => (
-                        <ListItem key={index}>
-                            <ListItemText
-                                primary={recipe.designation}
-                            />
-                        </ListItem>
-                    ))
-                }
-            </List>
+            <BasketList />
         </React.Fragment>
     )
 }

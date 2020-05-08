@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import CardDeck from '../components/recipeCards/CardDeck';
 import MatchButtons from '../components/matchButtons/MatchButtons';
 import { makeStyles } from '@material-ui/core/styles';
