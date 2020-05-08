@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import RecipeCard from './RecipeCard';
 import { makeStyles } from '@material-ui/core/styles';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
+import './cardDeck.css';
+import { ReceipesContext } from '../../contexts/Recipes/Recipes';
 
 const useStyle = makeStyles({
     card: {
@@ -15,6 +18,7 @@ const useStyle = makeStyles({
 })
 
 function CardDeck({recipes, className}) {
+    const { searchState } = useContext(ReceipesContext);
     const classes = useStyle();
 
     if(!recipes) {
@@ -22,13 +26,19 @@ function CardDeck({recipes, className}) {
     }
 
     return (
-        <div className={className}>
+        <TransitionGroup className={`${className} last-${searchState.liked ? 'liked' : 'disliked'}`}>
             {
-                [...recipes].reverse().map((recipe, index) => (
-                    <RecipeCard key={index} className={classes.card} {...recipe} />
+                [...searchState.recipes].reverse().map((recipe, index) => (
+                    <CSSTransition 
+                        key={index}
+                        timeout={500}
+                        classNames={`card`}
+                    >
+                        <RecipeCard className={classes.card} {...recipe} />
+                    </CSSTransition>
                 ))
             }
-        </div>
+        </TransitionGroup>
     )
 }
 
