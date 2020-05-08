@@ -21,7 +21,7 @@ function CardDeck({recipes, className}) {
     const { searchState } = useContext(ReceipesContext);
     const classes = useStyle();
 
-    if(!recipes) {
+    if(!searchState.recipes) {
         return "Something is wrong, try to reload the page !"
     }
 

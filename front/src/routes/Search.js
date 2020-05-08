@@ -2,7 +2,6 @@ import React, { useContext } from 'react';
 import CardDeck from '../components/recipeCards/CardDeck';
 import MatchButtons from '../components/matchButtons/MatchButtons';
 import { makeStyles } from '@material-ui/core/styles';
-import { ReceipesContext } from '../contexts/Recipes/Recipes';
 
 const useStyles = makeStyles({
     root: {
@@ -22,12 +21,10 @@ const useStyles = makeStyles({
 
 function Search() {
     const classes = useStyles();
-    const { searchState } = useContext(ReceipesContext);
 
     return (
         <div className={classes.root}>
             <CardDeck
-                recipes={searchState.recipes}
                 className={classes.deck}
             />
             <MatchButtons
