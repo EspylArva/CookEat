@@ -1,14 +1,13 @@
 import React from 'react';
 import { makeStyles, styled} from '@material-ui/core';
-//import './recipe.css';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import List from '@material-ui/icons/List';
 import LocalGroceryStore from '@material-ui/icons/LocalGroceryStore';
 import MenuBook from '@material-ui/icons/MenuBook';
-import ingredientScreen from '../components/recipe/recipe_ingredientScreen.js';
-import informationScreen from '../components/recipe/recipe_informationScreen.js'
-import etapeScreen from '../components/recipe/recipe_etapeScreen.js'
+import getIngredientScreen from '../components/recipe/recipe_ingredientScreen.js';
+import getInformationScreen from '../components/recipe/recipe_informationScreen.js'
+import getEtapeScreen from '../components/recipe/recipe_etapeScreen.js'
 
 const useStyles = makeStyles({
 
@@ -41,21 +40,23 @@ const BottomBarItem = styled(BottomNavigationAction)({
     color:"white",
 });
 
-const recipeName = "Tarte aux pommes de terre";
+//get name of recipe from ID
+const recipeName = "Coquillettes au fromage";
 
+//Envoyer l'id de la recette en paramètre des fonctions
 function switchPage(pageName){
   switch (pageName) {
     case 'informations':
       return (
-        informationScreen
+        getInformationScreen()
       )
     case 'ingredients':
       return(
-        ingredientScreen
+        getIngredientScreen()
       )
     case 'etapes':
       return( 
-        etapeScreen
+         getEtapeScreen()
         
       )
     default:
@@ -69,11 +70,13 @@ function Recipe () {
     
     return (
         <div>
-
             <div>
-                <h1 className={classes.recipeTitle}>
+                <h2 className={classes.recipeTitle}>
+                    {recipeName}
+                </h2>
+                <div>
                     {switchPage(value)}
-                </h1>
+                </div>
             </div>
             <BottomNavigation
                 value={value}
