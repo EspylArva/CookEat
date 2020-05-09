@@ -11,7 +11,10 @@ function getEtapeScreen(){
     return(
         <div>
             {stepList.map((item, index) =>(
-                <p>{item}</p>
+                <div>
+                    <h4>Etape {index + 1}</h4>
+                    <p>{item}</p>
+                </div>
             ))
             }
         </div>
