@@ -4,6 +4,7 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import { Chip, CardMedia } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import AwesomeSlider from 'react-awesome-slider';
+import img1 from 'coquillettes_1.jpg'
 
 const total_price = 2;
 const prep_time = 15;
@@ -21,7 +22,7 @@ function getInformationScreen(){
     return(
         <div>
             <CardMedia
-            image="coquillettes_1.jpg">
+            image={img1}>
 
             </CardMedia>
             <AwesomeSlider>
