@@ -1,5 +1,6 @@
 import React from 'react';
 
+//get the steps with the ID
 const etape1 = "Faire bouillir une casserole d'eau"
 const etape2 = "Verser les coquillettes dans l'eau bouillante et les laisser cuire pendant 10 minutes"
 const etape3 = "Egouter les pâtes et les servir dans une assiette"
