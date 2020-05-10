@@ -167,7 +167,7 @@ public class CookEatService {
         	String sql = String.format("SELECT * FROM ingredient INNER JOIN recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient_id WHERE recipe_ingredient.recipe_id = %s", recipe_id);
         	@SuppressWarnings("unchecked")
 //			Query<Ingredient> q = session.createQuery(hql, Ingredient.class);
-			Query<Ingredient> q = session.createSQLQuery(sql);
+			Query<Ingredient> q = session.createSQLQuery(sql).addEntity(Ingredient.class);
         	ingredients = q.list();
     	}
         catch (RuntimeException e) {

@@ -1,6 +1,9 @@
 package com.horizon.cookeat;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +13,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.horizon.cookeat.entities.*;
+import com.horizon.cookeat.entities.Ingredient;
+import com.horizon.cookeat.entities.Recipe;
 
 @CrossOrigin
 @RestController
@@ -25,14 +29,25 @@ public class CookEatAPI {
 	private CookEatService cookeat_services;
 	   
 	@GetMapping("/recipes")
-	public List<Recipe> fetchAllRecipes() {
+	public List<Map<String,Object>> fetchAllRecipes() {
+		List<Map<String,Object>> all = new ArrayList<Map<String,Object>>();
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
-		return allRecipes;
+		for(Object r : allRecipes)
+		{
+			Map<String, Object> entry = new HashMap<String, Object>();
+			entry.put("recette", r);
+			entry.put("ingredient", cookeat_services.getIngredients(((Recipe) r).getId()));
+		}
+		
+		return all;
 	}
 	
 	@GetMapping("/recipes/id")
-	public List<Recipe> fetchRecipe(@RequestParam String id) {
-		List<Recipe> recipe = cookeat_services.fetchRecipe(Integer.valueOf(id));
+	public Map<String,Object> fetchRecipe(@RequestParam String id) {
+		Map<String,Object> recipe = new HashMap<String, Object>();
+		Object r = cookeat_services.fetchRecipe(Integer.valueOf(id)).get(0);
+		recipe.put("recipe", r);
+		recipe.put("ingredients", cookeat_services.getIngredients(Integer.valueOf(id)));
 		return recipe;
 	} 
 	

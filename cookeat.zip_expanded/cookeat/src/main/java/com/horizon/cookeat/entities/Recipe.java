@@ -41,7 +41,6 @@ public class Recipe// implements Serializable
 	private String designation;
 	private int prep_time;
 	private int total_price;
-	private String path_to_icon;
 	
 	@OneToMany(
 	        mappedBy = "recipe",
@@ -87,7 +86,6 @@ public class Recipe// implements Serializable
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
-		this.path_to_icon = path_icon;
 	}
 	
 	public Recipe(String designation, int prep_time, int total_price, String path_icon, Map<Ingredient, Integer> ingredients)
@@ -95,7 +93,6 @@ public class Recipe// implements Serializable
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
-		this.path_to_icon = path_icon;
 		
 		for(Entry<Ingredient, Integer> entry : ingredients.entrySet())
 		{
@@ -182,12 +179,6 @@ public class Recipe// implements Serializable
 	}
 	public void setTotal_price(int total_price) {
 		this.total_price = total_price;
-	}
-	public String getPath_to_icon() {
-		return path_to_icon;
-	}
-	public void setPath_to_icon(String path_to_icon) {
-		this.path_to_icon = path_to_icon;
 	}
 	
 	
