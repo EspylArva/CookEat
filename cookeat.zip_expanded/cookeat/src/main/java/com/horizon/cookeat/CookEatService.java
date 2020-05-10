@@ -2,6 +2,11 @@ package com.horizon.cookeat;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,7 +15,8 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Service;
 
-import com.horizon.cookeat.entities.*;
+import com.horizon.cookeat.entities.Ingredient;
+import com.horizon.cookeat.entities.Recipe;
 
 @Service
 public class CookEatService {
@@ -68,17 +74,18 @@ public class CookEatService {
     	return recipes;
 	}	
 	
-//	public List<Recipe> fetchPool(int pageNumber)
-//	{
-//		Session session = Utils.sessionFactory.openSession();
-//		CriteriaBuilder cb = session.getCriteriaBuilder();
-//	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
-//	    Root<Recipe> rootEntry = cq.from(Recipe.class);
-//	    CriteriaQuery<Recipe> all = cq.select(rootEntry);
-//	 
-//	    TypedQuery<Recipe> allQuery = session.createQuery(all);
-//	    return allQuery.getResultList();
-//	}
+	public List<Recipe> fetchAll()
+	{
+		Session session = sessionFactory.openSession();
+		Transaction tx = null;
+		CriteriaBuilder cb = session.getCriteriaBuilder();
+	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
+	    Root<Recipe> rootEntry = cq.from(Recipe.class);
+	    CriteriaQuery<Recipe> all = cq.select(rootEntry);
+	 
+	    TypedQuery<Recipe> allQuery = session.createQuery(all);
+	    return allQuery.getResultList();
+	}
 	
 	public List<Recipe> fetchPool(int pageNumber, int quantity)
 	{
@@ -177,5 +184,7 @@ public class CookEatService {
 		finally { session.close(); }
     	return ingredients;
 	}
+
+
 	
 }

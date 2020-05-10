@@ -29,17 +29,17 @@ public class CookEatAPI {
 	private CookEatService cookeat_services;
 	   
 	@GetMapping("/recipes")
-	public List<Map<String,Object>> fetchAllRecipes() {
+	public /*List<Map<String,Object>>*/ List<Recipe> fetchAllRecipes() {
 		List<Map<String,Object>> all = new ArrayList<Map<String,Object>>();
-		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
-		for(Object r : allRecipes)
-		{
-			Map<String, Object> entry = new HashMap<String, Object>();
-			entry.put("recette", r);
-			entry.put("ingredient", cookeat_services.getIngredients(((Recipe) r).getId()));
-		}
-		
-		return all;
+		List<Recipe> allRecipes = cookeat_services.fetchAll();
+//		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
+//		for(Object r : allRecipes)
+//		{
+//			Map<String, Object> entry = new HashMap<String, Object>();
+//			entry.put("recette", r);
+//			entry.put("ingredient", cookeat_services.getIngredients(((Recipe) r).getId()));
+//		}
+		return allRecipes;
 	}
 	
 	@GetMapping("/recipes/id")
