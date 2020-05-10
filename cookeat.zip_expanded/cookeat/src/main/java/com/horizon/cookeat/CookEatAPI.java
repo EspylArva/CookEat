@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.horizon.cookeat.entities.*;
@@ -23,39 +24,39 @@ public class CookEatAPI {
 	@Autowired
 	private CookEatService cookeat_services;
 	   
-	@GetMapping("/get/recipe/all")
+	@GetMapping("/recipes")
 	public List<Recipe> fetchAllRecipes() {
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
 		return allRecipes;
 	}
 	
-	@GetMapping("/get/recipe/{recipe_id}")
-	public List<Recipe> fetchRecipe(@PathVariable String recipe_id) {
-		List<Recipe> recipe = cookeat_services.fetchRecipe(Integer.valueOf(recipe_id));
+	@GetMapping("/recipes/id")
+	public List<Recipe> fetchRecipe(@RequestParam String id) {
+		List<Recipe> recipe = cookeat_services.fetchRecipe(Integer.valueOf(id));
 		return recipe;
 	} 
 	
-	@GetMapping("/get/recipe/price/{recipe_id}")
+	@GetMapping("/recipes/price/{recipe_id}")
 	public int computePrice(@PathVariable String recipe_id) {
 		int price = cookeat_services.computeTotalPrice(Integer.valueOf(recipe_id));
 		return price ;
 	} 
 
-	@GetMapping("/filterBy/{Filter}/{Filter_value}")
+	@GetMapping("/recipes/{Filter}/{Filter_value}")
 	public List<Recipe> fetchAllRecipesFilteredBy(@PathVariable(name="Filter") String Filter, @PathVariable(name="Filter_value") Object Filter_value)
 	{
 		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(Filter.toUpperCase()), Filter_value);
 		return recipes;
 	}
 	
-	@GetMapping("/get/recipe/{pageNumber}/{quantity}")
-	public List<Recipe> updatePool(@PathVariable String pageNumber, @PathVariable String quantity)
+	@GetMapping("/recipes/{pageNumber}")
+	public List<Recipe> updatePool(@PathVariable(name="pageNumber") String pageNumber, @RequestParam String quantity)
 	{
 		List<Recipe> newPool = cookeat_services.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity));
 		return newPool;
 	}
 	
-	@GetMapping("/get/ingredient/{recette_id}")
+	@GetMapping("/ingredient/{recette_id}")
 	public List<Ingredient> getIngredient(@PathVariable String recette_id)
 	{
 		List<Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
