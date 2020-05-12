@@ -46,7 +46,9 @@ function RecipeCard({
   prep_time,
   total_price,
   list_gallery,
-  className
+  className,
+  like, 
+  dislike
 }) {
   const classes = useStyles();
   const [draggingState, setDraggingState] = useState({
@@ -62,7 +64,6 @@ function RecipeCard({
   }), [draggingState.isDragging, draggingState.translation]);
 
   const handleMouseDown = useCallback(({clientX, clientY}) => {
-    console.log("Down")
     setDraggingState(state => ({
       ...state,
       isDragging: true,
@@ -71,7 +72,6 @@ function RecipeCard({
   }, [])
 
   const handleMouseMove = useCallback(({clientX, clientY}) => {
-    console.log("Move")
     const translation = {x: clientX - draggingState.origin.x, y: clientY - draggingState.origin.y};
 
     setDraggingState(state => ({
@@ -81,11 +81,11 @@ function RecipeCard({
   }, [draggingState.origin]);
 
   const handleMouseUp = useCallback(() => {
-    console.log("Up")
     setDraggingState(state => ({
       ...state,
       isDragging: false
     }))
+    
   }, []);
 
   useEffect(() => {
@@ -96,7 +96,13 @@ function RecipeCard({
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
 
-      setDraggingState(state => ({...state, translation: ORIGIN}))
+      if(draggingState.translation.x > 100) {
+        like();
+      } else if(draggingState.translation.x < -100) {
+        dislike();
+      } else {
+        setDraggingState(state => ({...state, translation: ORIGIN}))
+      }
     }
   }, [draggingState.isDragging, handleMouseMove, handleMouseUp]);
 

@@ -18,7 +18,7 @@ const useStyle = makeStyles({
 })
 
 function CardDeck({recipes, className}) {
-    const { searchState } = useContext(ReceipesContext);
+    const { searchState, actions } = useContext(ReceipesContext);
     const classes = useStyle();
 
     if(!searchState.recipes || !searchState.recipes.length) {
@@ -40,7 +40,7 @@ function CardDeck({recipes, className}) {
                         timeout={500}
                         classNames={`card`}
                     >
-                        <RecipeCard className={classes.card} {...recipe} />
+                        <RecipeCard className={classes.card} like={actions.like} dislike={actions.dislike} {...recipe} />
                     </CSSTransition>
                 ))
             }
