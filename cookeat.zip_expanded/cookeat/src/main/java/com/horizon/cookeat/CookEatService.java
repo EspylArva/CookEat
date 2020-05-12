@@ -13,24 +13,26 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+//import com.horizon.cookeat.config.HibernateUtil;
 import com.horizon.cookeat.entities.Ingredient;
 import com.horizon.cookeat.entities.Recipe;
 
 @Service
 public class CookEatService {
 		
-//	@Autowired
-//	private RecipeDao recipeDao;
 	
 	private final Logger log = Logger.getLogger(this.getClass());
 	private SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-//	private SessionFactory sessionFactory = Utils.serviceSessionFactory;
+	
+//	@Autowired
+//	private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
 	
 	public List<Recipe> fetchAllRecipes()
 	{
-        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();	
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
@@ -77,7 +79,7 @@ public class CookEatService {
 	public List<Recipe> fetchAll()
 	{
 		Session session = sessionFactory.openSession();
-		Transaction tx = null;
+//		Transaction tx = null;
 		CriteriaBuilder cb = session.getCriteriaBuilder();
 	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
 	    Root<Recipe> rootEntry = cq.from(Recipe.class);

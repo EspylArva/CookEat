@@ -29,10 +29,10 @@ public class CookEatAPI {
 	private CookEatService cookeat_services;
 	   
 	@GetMapping("/recipes")
-	public /*List<Map<String,Object>>*/ List<Recipe> fetchAllRecipes() {
+	public List<Recipe> fetchAllRecipes() {
 		List<Map<String,Object>> all = new ArrayList<Map<String,Object>>();
-		List<Recipe> allRecipes = cookeat_services.fetchAll();
-//		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
+//		List<Recipe> allRecipes = cookeat_services.fetchAll();
+		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
 //		for(Object r : allRecipes)
 //		{
 //			Map<String, Object> entry = new HashMap<String, Object>();
