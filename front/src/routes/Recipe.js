@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import recipes from "../recipes.json"
 
+
 const useStyles = makeStyles({
 
     root: {
@@ -97,69 +98,3 @@ function Recipe () {
         
     )
 }
-
-
-function Test () {
-    const classes = useStyles();
-    const [value, setValue] = React.useState(0);
-
-    return (
-        <BottomNavigation
-        value={value}
-        onChange={(event, newValue) => {
-            setValue(newValue);
-        }}
-        showLabels
-        className={classes.root}
-        >
-        <BottomNavigationAction label="Recents" icon={<MenuBook />} />
-        <BottomNavigationAction label="Favorites" icon={<MenuBook />} />
-        <BottomNavigationAction label="Nearby" icon={<MenuBook />} />
-        </BottomNavigation>
-  );
-    
-}
-
-export default Recipe;
-
-/** 
-import React from 'react';
-import PropTypes from 'prop-types';
-import { withStyles } from "@bit/mui-org.material-ui.styles";
-import BottomNavigation from '@material-ui/core/BottomNavigation';
-import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
-
-const styles = {
-  root: {
-    width: 500
-  }
-};
-
-class LabelBottomNavigation extends React.Component {
-  state = {
-    value: 'recents'
-  };
-
-  handleChange = (event, value) => {
-    this.setState({ value });
-  };
-
-  render() {
-    const { classes } = this.props;
-    const { value } = this.state;
-
-    return <BottomNavigation value={value} onChange={this.handleChange} className={classes.root}>
-        <BottomNavigationAction label="Recents" value="recents"  />
-        <BottomNavigationAction label="Favorites" value="favorites"  />
-        <BottomNavigationAction label="Nearby" value="nearby"  />
-        <BottomNavigationAction label="Folder" value="folder" />
-      </BottomNavigation>;
-  }
-}
-
-LabelBottomNavigation.propTypes = {
-  classes: PropTypes.object.isRequired
-};
-
-export default withStyles(styles)(LabelBottomNavigation);
-*/

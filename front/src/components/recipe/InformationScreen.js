@@ -6,7 +6,6 @@ import { makeStyles } from '@material-ui/core';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 
-
 const total_price = 2;
 const prep_time = 15;
 
