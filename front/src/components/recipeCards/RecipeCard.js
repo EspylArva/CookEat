@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { Card, CardMedia, CardActionArea, Typography, Chip, CardContent } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import EuroIcon from '@material-ui/icons/Euro';
@@ -39,6 +39,8 @@ const useStyles = makeStyles({
   }
 });
 
+const ORIGIN = {x: 0, y: 0}
+
 function RecipeCard({
   designation,
   prep_time,
@@ -47,10 +49,62 @@ function RecipeCard({
   className
 }) {
   const classes = useStyles();
+  const [draggingState, setDraggingState] = useState({
+    isDragging: false,
+    origin: ORIGIN,
+    translation: ORIGIN
+  });
+  
+  const styles = useMemo(() => ({
+    cursor: draggingState.isDragging ? 'grabbing' : 'grab',
+    transform: `translate(${draggingState.translation.x}px, ${draggingState.translation.y}px)`,
+    transition: draggingState.isDragging ? 'none' : 'transform 500ms',
+  }), [draggingState.isDragging, draggingState.translation]);
+
+  const handleMouseDown = useCallback(({clientX, clientY}) => {
+    console.log("Down")
+    setDraggingState(state => ({
+      ...state,
+      isDragging: true,
+      origin: {x: clientX, y: clientY}
+    }))
+  }, [])
+
+  const handleMouseMove = useCallback(({clientX, clientY}) => {
+    console.log("Move")
+    const translation = {x: clientX - draggingState.origin.x, y: clientY - draggingState.origin.y};
+
+    setDraggingState(state => ({
+      ...state,
+      translation
+    }))
+  }, [draggingState.origin]);
+
+  const handleMouseUp = useCallback(() => {
+    console.log("Up")
+    setDraggingState(state => ({
+      ...state,
+      isDragging: false
+    }))
+  }, []);
+
+  useEffect(() => {
+    if(draggingState.isDragging) {
+      window.addEventListener('mousemove', handleMouseMove);
+      window.addEventListener('mouseup', handleMouseUp);
+    } else {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('mouseup', handleMouseUp);
+
+      setDraggingState(state => ({...state, translation: ORIGIN}))
+    }
+  }, [draggingState.isDragging, handleMouseMove, handleMouseUp]);
+
 
   return (
-    <div className={className}>
+    <div className={className} onMouseDown={handleMouseDown}>
       <Card
+        style={styles}
         elevation={5} 
         className={classes.root}
       >

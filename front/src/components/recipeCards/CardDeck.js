@@ -29,10 +29,12 @@ function CardDeck({recipes, className}) {
         )
     }
 
+    const showedRecipes = [...searchState.recipes].slice(0, 3); // Limiting number of rendered cards for performance issues
+
     return (
         <TransitionGroup className={`${className} last-${searchState.liked ? 'liked' : 'disliked'}`}>
             {
-                [...searchState.recipes].reverse().map((recipe, index) => (
+                showedRecipes.reverse().map((recipe, index) => (
                     <CSSTransition 
                         key={recipe.id}
                         timeout={500}
