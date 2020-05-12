@@ -1,6 +1,6 @@
 import React from 'react';
 
-function getIngredientScreen(){
+function IngredientScreen(){
     return(
         <div>
             Ingredient Screen !
@@ -8,4 +8,4 @@ function getIngredientScreen(){
     )
 }
 
-export default getIngredientScreen;
+export default IngredientScreen;

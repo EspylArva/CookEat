@@ -8,7 +8,7 @@ const etape4 = "Recouvrir les pâtes d'un max de gruyère"
 
 const stepList = [etape1, etape2, etape3, etape4]
 
-function getEtapeScreen(){
+function EtapeScreen(){
     return(
         <div>
             {stepList.map((item, index) =>(
@@ -21,4 +21,4 @@ function getEtapeScreen(){
         </div>
     )
 }
-export default getEtapeScreen;
+export default EtapeScreen;
