@@ -34,7 +34,7 @@ function CardDeck({recipes, className}) {
             {
                 [...searchState.recipes].reverse().map((recipe, index) => (
                     <CSSTransition 
-                        key={index}
+                        key={recipe.id}
                         timeout={500}
                         classNames={`card`}
                     >

@@ -18,7 +18,7 @@ function BasketList() {
             <List>
                 {
                     basketState.basket.map((recipe, index) => (
-                        <BasketItem key={index} {...recipe} />
+                        <BasketItem key={recipe.id} {...recipe} />
                     ))
                 }
             </List>

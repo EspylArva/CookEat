@@ -15,13 +15,17 @@ export function ReceipesProvider({ children }) {
     });
 
     const like = () => {
-        const recipe = searchState.recipes[0];
-        searchDispatch(searchLike());
-        basketDispatch(add(recipe));
+        if(searchState.recipes.length !== 0) {
+            const recipe = searchState.recipes[0];
+            searchDispatch(searchLike());
+            basketDispatch(add(recipe));
+        }
     }
 
     const dislike = () => {
-        searchDispatch(searchDislike());
+        if(searchState.recipes.length !== 0) {
+            searchDispatch(searchDislike());
+        }
     }
 
     const actions = {
