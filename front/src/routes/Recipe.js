@@ -8,9 +8,9 @@ import MenuBook from '@material-ui/icons/MenuBook';
 import IngredientScreen from '../components/recipe/IngredientScreen.js';
 import InformationScreen from '../components/recipe/InformationScreen.js'
 import EtapeScreen from '../components/recipe/EtapeScreen.js'
-import { useSwipeable, Swipeable } from 'react-swipeable'
 import { Link } from 'react-router-dom';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+import recipes from "../recipes.json"
 
 const useStyles = makeStyles({
 

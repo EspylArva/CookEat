@@ -1,7 +1,7 @@
 import React from 'react';
 import EuroIcon from '@material-ui/icons/Euro';
 import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
-import { Chip, CardMedia } from '@material-ui/core';
+import { Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
