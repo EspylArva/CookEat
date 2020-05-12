@@ -14,27 +14,31 @@ const useStyles = makeStyles({
     chip:{
         backgroundColor: "white",
         padding: "5px",
+        borderWidth: "2px",
+        borderColor:"black"
+    },
+    img:{
+        margin:"0 0 10% 0",
+        maxWidth:"100px"
     }
 });
 
 
-function getInformationScreen(){
-    //const classes = useStyles();
+function InformationScreen(){
+    const classes = useStyles();
+
+    //make a max width
     return(
         <div>
-            <CardMedia
-            >
-
-            </CardMedia>
-            <AwesomeSlider>
+            <AwesomeSlider className={classes.img}> 
                 <div data-src="/local_test_res/coquillettes_1.jpg" />
                 <div data-src="/local_test_res/coquillettes_2.jpg" />
                 <div data-src="/local_test_res/coquillettes_3.jpg" />
             </AwesomeSlider>
-            <Chip label={prep_time + "min"} icon={<HourglassEmptyIcon />} />
-            <Chip label={total_price} icon={<EuroIcon />} />
+            <Chip  className={classes.chip} label={prep_time + "min"} icon={<HourglassEmptyIcon />} variant="outlined"/><br/>
+            <Chip  className={classes.chip} label={total_price} icon={<EuroIcon />} variant="outlined" />
         </div>
     )
 }
 
-export default getInformationScreen;
+export default InformationScreen;

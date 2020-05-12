@@ -5,9 +5,12 @@ import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import List from '@material-ui/icons/List';
 import LocalGroceryStore from '@material-ui/icons/LocalGroceryStore';
 import MenuBook from '@material-ui/icons/MenuBook';
-import getIngredientScreen from '../components/recipe/recipe_ingredientScreen.js';
-import getInformationScreen from '../components/recipe/recipe_informationScreen.js'
-import getEtapeScreen from '../components/recipe/recipe_etapeScreen.js'
+import IngredientScreen from '../components/recipe/IngredientScreen.js';
+import InformationScreen from '../components/recipe/InformationScreen.js'
+import EtapeScreen from '../components/recipe/EtapeScreen.js'
+import { useSwipeable, Swipeable } from 'react-swipeable'
+import { Link } from 'react-router-dom';
+import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
 
 const useStyles = makeStyles({
 
@@ -30,9 +33,9 @@ const useStyles = makeStyles({
     recipeTitle:{
         textAlign: "center",
     },
-    rooot: {
-        width: 500,
-      },
+    default: {
+        maxWidth:"1000px"
+    },
   });
 
 
@@ -42,27 +45,6 @@ const BottomBarItem = styled(BottomNavigationAction)({
 
 //get name of recipe from ID
 const recipeName = "Coquillettes au fromage";
-
-//Envoyer l'id de la recette en paramètre des fonctions
-function switchPage(pageName){
-  switch (pageName) {
-    case 'informations':
-      return (
-        getInformationScreen()
-      )
-    case 'ingredients':
-      return(
-        getIngredientScreen()
-      )
-    case 'etapes':
-      return( 
-         getEtapeScreen()
-        
-      )
-    default:
-      break;
-  }
-}
 
 function Recipe () {
     const classes = useStyles();
@@ -75,20 +57,40 @@ function Recipe () {
                     {recipeName}
                 </h2>
                 <div>
-                    {switchPage(value)}
+                  <Switch>
+                    <Route path ='/recipe/informations' component={InformationScreen}></Route>
+                    <Route path ='/recipe/ingredients' component={IngredientScreen}></Route>
+                    <Route path ='/recipe/etape' component={EtapeScreen}></Route>
+                  </Switch>
+                  
                 </div>
+                
             </div>
             <BottomNavigation
                 value={value}
                 onChange={(event, newValue) => {
                     setValue(newValue);
+                    
                 }}
+                
                 showLabels
                 className={classes.root}
                 >
-                    <BottomBarItem label="Informations" value="informations" icon={<MenuBook />}/>
-                    <BottomBarItem label="Ingrédients" value="ingredients" icon={<LocalGroceryStore />} />
-                    <BottomBarItem label="Etapes" value="etapes" icon={<List />}/>
+                    <BottomNavigationAction 
+                      component={Link}
+                      to="/recipe/informations"
+                      icon={<MenuBook/>}
+                      label="Information"/>
+                    <BottomNavigationAction 
+                      component={Link}
+                      to="/recipe/ingredients"
+                      icon={<LocalGroceryStore/>}
+                      label="Ingredient"/>
+                    <BottomNavigationAction 
+                      component={Link}
+                      to="/recipe/etape"
+                      icon={<List/>}
+                      label="Etape"/>
             </BottomNavigation>
         </div>
 
