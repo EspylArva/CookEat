@@ -39,23 +39,21 @@ const useStyles = makeStyles({
     },
   });
 
-
-const BottomBarItem = styled(BottomNavigationAction)({
-    color:"white",
-});
-
 //get name of recipe from ID
-const recipeName = "Coquillettes au fromage";
+const idTest = 2;
 
 function Recipe () {
     const classes = useStyles();
     const [value, setValue] = React.useState(0);
-    
     return (
         <div>
             <div>
                 <h2 className={classes.recipeTitle}>
-                    {recipeName}
+                  {recipes.map((recipe, index) => {
+                      if(recipe.id == idTest){
+                        return <h2>{recipe.designation}</h2>
+                      }
+                    })}
                 </h2>
                 <div>
                   <Switch>
@@ -64,8 +62,7 @@ function Recipe () {
                     <Route path ='/recipe/etape' component={EtapeScreen}></Route>
                   </Switch>
                   
-                </div>
-                
+                </div> 
             </div>
             <BottomNavigation
                 value={value}
@@ -93,9 +90,7 @@ function Recipe () {
                       icon={<List/>}
                       label="Etape"/>
             </BottomNavigation>
-        </div>
-
-        
+        </div>        
     )
 }
 
