@@ -1,5 +1,6 @@
 package com.horizon.cookeat.entities;
 
+import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -30,8 +31,13 @@ import org.hibernate.annotations.NaturalIdCache;
 @Cache(
     usage = CacheConcurrencyStrategy.READ_WRITE
 )
-public class Recipe// implements Serializable
+public class Recipe implements Serializable
 {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")

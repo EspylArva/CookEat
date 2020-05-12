@@ -3,46 +3,39 @@ package com.horizon.cookeat;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-//import com.horizon.cookeat.config.HibernateUtil;
-import com.horizon.cookeat.entities.Ingredient;
-import com.horizon.cookeat.entities.Recipe;
+import com.horizon.cookeat.entities.*;
 
 @Service
 public class CookEatService {
-		
 	
 	private final Logger log = Logger.getLogger(this.getClass());
-	private SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
-	
-//	@Autowired
-//	private SessionFactory sessionFactory = HibernateUtil.getSessionFactory();
-	
+	private Session session = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory().openSession();
+
 	public List<Recipe> fetchAllRecipes()
 	{
-        Session session = sessionFactory.openSession();	
+//        Session session = sessionFactory.openSession();	
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
     	{
         	tx = session.beginTransaction();
         	String hql = "Select _recipe from Recipe as _recipe";
-//        	String hql = "from Recipe",
-//        	@SuppressWarnings("unchecked")
-			Query<Recipe> q = session.createQuery(hql, Recipe.class);
+//        	String hql = "fullRecipe ::= NEW constructor_name(constructor_item {, constructor_item}*)";
+//        	String hql = "SELECT NEW com.horizon.cookeat.entities.Recipe(c.name, c.country.name) FROM customer c WHERE c.lastname = 'Coss' AND c.firstname = 'Roxane'";
+//			@SuppressWarnings("unchecked")
+			TypedQuery<Recipe> q = session.createQuery(hql, Recipe.class);
         	recipes = q.getResultList();
+        	for(Recipe r : recipes)
+        	{
+        		System.out.println(r.getDesignation());
+        	}
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -56,14 +49,13 @@ public class CookEatService {
 
 	public List<Recipe> fetchRecipe(int recipe_id)
 	{
-        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
     	{
         	tx = session.beginTransaction();
         	String hql = String.format("select _recipe from Recipe _recipe where _recipe.id='%s'", recipe_id);
-//        	String hql = "select _recipe from Recipe as _recipe";
         	@SuppressWarnings("unchecked")
 			Query<Recipe> q = session.createQuery(hql);
         	recipes = q.list();
@@ -78,20 +70,23 @@ public class CookEatService {
 	
 	public List<Recipe> fetchAll()
 	{
-		Session session = sessionFactory.openSession();
+//		Session session = sessionFactory.openSession();
 //		Transaction tx = null;
-		CriteriaBuilder cb = session.getCriteriaBuilder();
-	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
-	    Root<Recipe> rootEntry = cq.from(Recipe.class);
-	    CriteriaQuery<Recipe> all = cq.select(rootEntry);
-	 
-	    TypedQuery<Recipe> allQuery = session.createQuery(all);
-	    return allQuery.getResultList();
+//		CriteriaBuilder cb = session.getCriteriaBuilder();
+//	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
+//	    Root<Recipe> rootEntry = cq.from(Recipe.class);
+//	    CriteriaQuery<Recipe> all = cq.select(rootEntry);
+//	 
+//	    TypedQuery<Recipe> allQuery = session.createQuery(all);
+		
+		@SuppressWarnings({ "unchecked", "deprecation" })
+		List<Recipe> recipes = session.createCriteria(Recipe.class).list();
+	    return recipes;
 	}
 	
 	public List<Recipe> fetchPool(int pageNumber, int quantity)
 	{
-        Session session = sessionFactory.openSession();
+//        Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
@@ -115,7 +110,7 @@ public class CookEatService {
 
 	public List<Recipe> fetchAllRecipesFilteredBy(Filter filter, Object filterValue)
 	{
-		Session session = sessionFactory.openSession();
+//		Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
 		try
@@ -167,7 +162,7 @@ public class CookEatService {
 	
 	public List<Ingredient> getIngredients(int recipe_id)
 	{
-		Session session = sessionFactory.openSession();
+//		Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Ingredient> ingredients = null;  
         try
@@ -175,7 +170,6 @@ public class CookEatService {
         	tx = session.beginTransaction();
         	String sql = String.format("SELECT * FROM ingredient INNER JOIN recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient_id WHERE recipe_ingredient.recipe_id = %s", recipe_id);
         	@SuppressWarnings("unchecked")
-//			Query<Ingredient> q = session.createQuery(hql, Ingredient.class);
 			Query<Ingredient> q = session.createSQLQuery(sql).addEntity(Ingredient.class);
         	ingredients = q.list();
     	}
@@ -186,7 +180,4 @@ public class CookEatService {
 		finally { session.close(); }
     	return ingredients;
 	}
-
-
-	
 }
