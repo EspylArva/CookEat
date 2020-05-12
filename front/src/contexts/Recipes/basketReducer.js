@@ -1,5 +1,6 @@
 // Actions
 export const ADD = "ADD";
+export const REMOVE = "REMOVE";
 
 // Actions creators
 export function add(recipe) {
@@ -8,6 +9,15 @@ export function add(recipe) {
         payload: {
             recipe,
         },
+    }
+}
+
+export function remove(recipeId) {
+    return {
+        type: REMOVE,
+        payload: {
+            recipeId
+        }
     }
 }
 
@@ -21,6 +31,11 @@ export default function reducer(state, action) {
                 ...state,
                 basket: [...state.basket, action.payload.recipe]
             };
+        case REMOVE:
+            return {
+                ...state,
+                basket: state.basket.filter(recipe => !(recipe.id === action.payload.recipeId))
+            }
         default:
             return state;
     }

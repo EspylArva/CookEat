@@ -5,7 +5,7 @@ import { ReceipesContext } from '../../contexts/Recipes/Recipes';
 import BasketItem from './BasketItem';
 
 function BasketList() {
-    const { basketState } = useContext(ReceipesContext);
+    const { basketState, actions } = useContext(ReceipesContext);
 
     if(!basketState.basket || !basketState.basket.length) {
         return (
@@ -18,7 +18,7 @@ function BasketList() {
             <List>
                 {
                     basketState.basket.map((recipe, index) => (
-                        <BasketItem key={recipe.id} {...recipe} />
+                        <BasketItem key={recipe.id} remove={actions.remove} {...recipe} />
                     ))
                 }
             </List>

@@ -1,6 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import searchReducer, { like as searchLike, dislike as searchDislike } from './searchReducer';
-import basketReducer, { add } from './basketReducer';
+import basketReducer, { add, remove as removeRecipe } from './basketReducer';
 import recipes from './recipes.json';
 
 export const ReceipesContext = createContext();
@@ -28,9 +28,14 @@ export function ReceipesProvider({ children }) {
         }
     }
 
+    const remove = (recipeId) => {
+        basketDispatch(removeRecipe(recipeId));
+    }
+
     const actions = {
         like,
-        dislike
+        dislike,
+        remove
     }
 
     return (

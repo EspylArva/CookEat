@@ -1,7 +1,8 @@
 import React from 'react';
-import { ListItem, ListItemText, ListItemAvatar, Avatar } from '@material-ui/core';
+import { ListItem, ListItemText, ListItemAvatar, Avatar, ListItemSecondaryAction, IconButton } from '@material-ui/core';
+import DeleteIcon from '@material-ui/icons/Delete';
 
-function BasketItem({ designation, list_gallery, total_price, prep_time }) {
+function BasketItem({ id, designation, list_gallery, total_price, prep_time, remove }) {
     return (
         <ListItem>
             <ListItemAvatar>
@@ -11,6 +12,11 @@ function BasketItem({ designation, list_gallery, total_price, prep_time }) {
                 primary={designation}
                 secondary={`${total_price}€ - ${prep_time}min `}
             />
+            <ListItemSecondaryAction>
+                <IconButton onClick={() => remove(id)} edge="end" aria-label="delete">
+                    <DeleteIcon />
+                </IconButton>
+            </ListItemSecondaryAction>
         </ListItem>
     )
 }
