@@ -1,4 +1,4 @@
-package com.horizon.cookeat;
+package com.horizon.cookeat.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,8 +12,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
+import com.horizon.cookeat.config.Utils;
 import com.horizon.cookeat.entities.Ingredient;
 import com.horizon.cookeat.entities.Recipe;
 
@@ -29,11 +34,23 @@ public class CookEatAPI {
 	@Autowired
 	private CookEatService cookeat_services;
 	   
+	@ResponseBody
 	@RequestMapping(value = "/recipes")
-	public List<Recipe> fetchAllRecipes() {
+	public List<JsonObject> fetchAllRecipes() {
 //		List<Recipe> allRecipes = cookeat_services.fetchAll();
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
-		return allRecipes;
+		List<JsonObject> recipes = new ArrayList<JsonObject>();
+		for(Recipe r : allRecipes)
+		{
+			JsonObject jo = Utils.gson.fromJson(r.toString(), JsonObject.class);
+//			List<Ingredient> r_ing = cookeat_services.getIngredients(r.getId());
+//			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<Recipe>>() {}.getType());
+//			jo.add("ingredients", r_ingredients);
+			System.out.println(jo.toString());
+			recipes.add(jo);
+		}
+//		System.out.println(recipes);
+		return recipes;
 	}
 	
 	@RequestMapping(value = "/recipes", params = "id")
@@ -48,7 +65,7 @@ public class CookEatAPI {
 	@RequestMapping(value = "/recipes", params = { "filter", "value" })
 	public List<Recipe> fetchAllRecipesFilteredBy(@RequestParam(name="filter") String filter, @RequestParam(name="value") Object value)
 	{
-		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.Filter.valueOf(filter.toUpperCase()), value);
+		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.config.Filter.valueOf(filter.toUpperCase()), value);
 		return recipes;
 	}
 	

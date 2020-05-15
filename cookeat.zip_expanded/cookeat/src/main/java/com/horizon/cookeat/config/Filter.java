@@ -1,4 +1,4 @@
-package com.horizon.cookeat;
+package com.horizon.cookeat.config;
 
 public enum Filter {
 	PRICE,

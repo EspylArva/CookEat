@@ -20,7 +20,7 @@ public class Etape {
 	private int step_order;
 	private String description;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Recipe recipe;
 
 	// METHODS //

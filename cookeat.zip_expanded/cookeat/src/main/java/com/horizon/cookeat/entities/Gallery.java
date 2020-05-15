@@ -20,7 +20,7 @@ public class Gallery {
 	private String path;
 	private String description;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	private Recipe recipe;
 	
 	// METHODS //

@@ -1,41 +1,44 @@
-package com.horizon.cookeat;
+package com.horizon.cookeat.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.TypedQuery;
+
 import org.apache.log4j.Logger;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
+import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
-import com.horizon.cookeat.entities.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.horizon.cookeat.config.Filter;
+import com.horizon.cookeat.config.Utils;
+import com.horizon.cookeat.entities.Ingredient;
+import com.horizon.cookeat.entities.Recipe;
 
 @Service
 public class CookEatService {
 	
 	private final Logger log = Logger.getLogger(this.getClass());
-	private Session session = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory().openSession();
+	private SessionFactory sessionFactory = new Configuration().configure("hibernate.cfg.xml").buildSessionFactory();
 
 	public List<Recipe> fetchAllRecipes()
 	{
-//        Session session = sessionFactory.openSession();	
+        Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
     	{
+        	Gson gson = new Gson();
         	tx = session.beginTransaction();
         	String hql = "Select _recipe from Recipe as _recipe";
-//        	String hql = "fullRecipe ::= NEW constructor_name(constructor_item {, constructor_item}*)";
-//        	String hql = "SELECT NEW com.horizon.cookeat.entities.Recipe(c.name, c.country.name) FROM customer c WHERE c.lastname = 'Coss' AND c.firstname = 'Roxane'";
-//			@SuppressWarnings("unchecked")
 			TypedQuery<Recipe> q = session.createQuery(hql, Recipe.class);
         	recipes = q.getResultList();
-        	for(Recipe r : recipes)
-        	{
-        		System.out.println(r.getDesignation());
-        	}
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -49,7 +52,7 @@ public class CookEatService {
 
 	public List<Recipe> fetchRecipe(int recipe_id)
 	{
-//        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
@@ -70,7 +73,7 @@ public class CookEatService {
 	
 	public List<Recipe> fetchAll()
 	{
-//		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.openSession();
 //		Transaction tx = null;
 //		CriteriaBuilder cb = session.getCriteriaBuilder();
 //	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
@@ -86,7 +89,7 @@ public class CookEatService {
 	
 	public List<Recipe> fetchPool(int pageNumber, int quantity)
 	{
-//        Session session = sessionFactory.openSession();
+        Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
         try
@@ -110,7 +113,7 @@ public class CookEatService {
 
 	public List<Recipe> fetchAllRecipesFilteredBy(Filter filter, Object filterValue)
 	{
-//		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Recipe> recipes = null;  
 		try
@@ -162,16 +165,21 @@ public class CookEatService {
 	
 	public List<Ingredient> getIngredients(int recipe_id)
 	{
-//		Session session = sessionFactory.openSession();
+		Session session = sessionFactory.openSession();
         Transaction tx = null;
         List<Ingredient> ingredients = null;  
         try
     	{
         	tx = session.beginTransaction();
-        	String sql = String.format("SELECT * FROM ingredient INNER JOIN recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient_id WHERE recipe_ingredient.recipe_id = %s", recipe_id);
-        	@SuppressWarnings("unchecked")
-			Query<Ingredient> q = session.createSQLQuery(sql).addEntity(Ingredient.class);
-        	ingredients = q.list();
+        	String hql = String.format("SELECT ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
+			Query q = session.createQuery(hql);
+        	ingredients = q.getResultList();
+        	for(Object ing : ingredients)
+        	{
+        		System.out.println(ing + " : " + ing.toString());
+        		String jo = Utils.gson.toJson(ing, JsonObject.class);
+        		System.out.println(jo);
+        	}
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
