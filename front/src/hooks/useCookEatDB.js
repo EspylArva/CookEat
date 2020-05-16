@@ -22,8 +22,14 @@ function useCookeatDB(table) {
         load();
     }, [])
 
+    function remove(id) {
+        cookeatDb[table].delete(id);
+        load();
+    }
+
     const actions = {
-        reload: load
+        reload: load,
+        remove
     }
 
     return [basket, loading, error, actions];

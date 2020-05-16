@@ -30,7 +30,7 @@ function BasketList() {
             <List>
                 {
                     basket.map((recipe, index) => (
-                        <BasketItem key={recipe.id} remove={undefined} {...recipe} />
+                        <BasketItem key={recipe.id} remove={actions.remove} {...recipe} />
                     ))
                 }
             </List>
