@@ -1,21 +1,25 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React from 'react';
 import { List } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { ReceipesContext } from '../../contexts/Recipes/Recipes';
 import BasketItem from './BasketItem';
-import cookeatDb from '../../indexedDb/cookeatDb';
+import useCookeatDB from '../../hooks/useCookEatDB';
 
 function BasketList() {
-    //const { basketState, actions } = useContext(ReceipesContext);
-    const [basketState, setBasketState] = useState(undefined);
+    const [basket, loading, error, actions] = useCookeatDB('basketRecipes');
 
-    useEffect(() => {
-        (async () => {
-            setBasketState(await cookeatDb.basketRecipes.toArray())
-        })()
-    }, [])
+    if(error) {
+        return (
+            <em>Il y a eu une erreur lors du chargement du panier. En attendant <Link to="/search">vous pouvez aller matcher ici</Link></em>
+        )
+    }
 
-    if(!basketState || !basketState.length) {
+    if(!basket || !basket.length) {
+        if(loading) {
+            return (
+                <em>Nous chargeons vos recettes sauvagés depuis votre téléphone</em>
+            )
+        }
+
         return (
             <em>Vous n'avez pas de recette dans votre panier. <Link to="/search">Vous pouvez aller matcher ici</Link></em>
         )
@@ -25,7 +29,7 @@ function BasketList() {
         <React.Fragment>
             <List>
                 {
-                    basketState.map((recipe, index) => (
+                    basket.map((recipe, index) => (
                         <BasketItem key={recipe.id} remove={undefined} {...recipe} />
                     ))
                 }

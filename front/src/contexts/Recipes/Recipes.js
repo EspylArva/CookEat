@@ -1,6 +1,5 @@
 import React, { createContext, useReducer } from 'react';
 import searchReducer, { like as searchLike, dislike as searchDislike } from './searchReducer';
-import basketReducer, { add, remove as removeRecipe } from './basketReducer';
 import cookeatDb from '../../indexedDb/cookeatDb';
 import recipes from './recipes.json';
 
@@ -10,9 +9,6 @@ export function ReceipesProvider({ children }) {
     const [searchState, searchDispatch] = useReducer(searchReducer, {
         recipes: recipes,
         liked: false,
-    });
-    const [basketState, basketDispatch] = useReducer(basketReducer, {
-        basket: [],
     });
 
     const like = () => {
@@ -29,18 +25,13 @@ export function ReceipesProvider({ children }) {
         }
     }
 
-    const remove = (recipeId) => {
-        basketDispatch(removeRecipe(recipeId));
-    }
-
     const actions = {
         like,
-        dislike,
-        remove
+        dislike
     }
 
     return (
-        <ReceipesContext.Provider value={{ searchState, searchDispatch, basketState, basketDispatch, actions }}>
+        <ReceipesContext.Provider value={{ searchState, searchDispatch, actions }}>
             { children }
         </ReceipesContext.Provider>
     )
