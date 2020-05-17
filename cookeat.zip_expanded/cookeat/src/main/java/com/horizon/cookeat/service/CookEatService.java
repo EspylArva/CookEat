@@ -15,7 +15,9 @@ import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.reflect.TypeToken;
 import com.horizon.cookeat.config.Filter;
 import com.horizon.cookeat.config.Utils;
 import com.horizon.cookeat.entities.Ingredient;
@@ -71,22 +73,6 @@ public class CookEatService {
 		finally { session.close(); }
     	return recipes;
 	}	
-	
-	public List<Recipe> fetchAll()
-	{
-		Session session = sessionFactory.openSession();
-//		Transaction tx = null;
-//		CriteriaBuilder cb = session.getCriteriaBuilder();
-//	    CriteriaQuery<Recipe> cq = cb.createQuery(Recipe.class);
-//	    Root<Recipe> rootEntry = cq.from(Recipe.class);
-//	    CriteriaQuery<Recipe> all = cq.select(rootEntry);
-//	 
-//	    TypedQuery<Recipe> allQuery = session.createQuery(all);
-		
-		@SuppressWarnings({ "unchecked", "deprecation" })
-		List<Recipe> recipes = session.createCriteria(Recipe.class).list();
-	    return recipes;
-	}
 	
 	public List<Recipe> fetchPool(int pageNumber, int quantity)
 	{
@@ -189,4 +175,19 @@ public class CookEatService {
 		finally { session.close(); }
     	return ingredients;
 	}
+	
+	public List<JsonObject> toListJson(List<Recipe> allRecipes)
+	{
+		List<JsonObject> recipes = new ArrayList<JsonObject>();
+		for(Recipe r : allRecipes)
+		{
+			JsonObject jo = Utils.gson.fromJson(r.toString(), JsonObject.class);
+			List<R_Ingredient> r_ing = getIngredients(r.getId());
+			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<R_Ingredient>>() {}.getType());
+			jo.add("ingredients", r_ingredients);
+			recipes.add(jo);
+		}
+		return recipes;
+	}
+	
 }

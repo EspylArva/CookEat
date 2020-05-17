@@ -36,53 +36,37 @@ public class CookEatAPI {
 	@ResponseBody
 	@RequestMapping(value = "/recipes")
 	public String fetchAllRecipes() {
-//		List<Recipe> allRecipes = cookeat_services.fetchAll();
-		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
-		List<JsonObject> recipes = new ArrayList<JsonObject>();
-		for(Recipe r : allRecipes)
-		{
-			JsonObject jo = Utils.gson.fromJson(r.toString(), JsonObject.class);
-			List<R_Ingredient> r_ing = cookeat_services.getIngredients(r.getId());
-			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<R_Ingredient>>() {}.getType());
-			System.out.println("--" + r_ingredients.toString());
-			jo.add("ingredients", r_ingredients);
-			System.out.println(jo.toString());
-			recipes.add(jo);
-		}
-//		System.out.println(recipes);
+		List<JsonObject> recipes = cookeat_services.toListJson(cookeat_services.fetchAllRecipes());
 		return recipes.toString();
 	}
 	
 	@RequestMapping(value = "/recipes", params = "id")
-	public Map<String,Object> fetchRecipe(@RequestParam String id) {
-		Map<String,Object> recipe = new HashMap<String, Object>();
-		Object r = cookeat_services.fetchRecipe(Integer.valueOf(id)).get(0);
-		recipe.put("recipe", r);
-		recipe.put("ingredients", cookeat_services.getIngredients(Integer.valueOf(id)));
-		return recipe;
+	public String fetchRecipe(@RequestParam String id) {
+		List<JsonObject> recipes = cookeat_services.toListJson(cookeat_services.fetchRecipe(Integer.valueOf(id)));
+		return recipes.get(0).toString();
 	} 
 
 	@RequestMapping(value = "/recipes", params = { "filter", "value" })
-	public List<Recipe> fetchAllRecipesFilteredBy(@RequestParam(name="filter") String filter, @RequestParam(name="value") Object value)
+	public String fetchAllRecipesFilteredBy(@RequestParam(name="filter") String filter, @RequestParam(name="value") Object value)
 	{
-		List<Recipe> recipes = cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.config.Filter.valueOf(filter.toUpperCase()), value);
-		return recipes;
+		List<JsonObject> recipes = cookeat_services.toListJson(cookeat_services.fetchAllRecipesFilteredBy(com.horizon.cookeat.config.Filter.valueOf(filter.toUpperCase()), value));
+		return recipes.toString();
 	}
 	
 //	@GetMapping("/recipes/{pageNumber}")
 	@RequestMapping(value = "/recipes", params = { "id", "quantity" })
-	public List<Recipe> updatePool(@RequestParam(name="id") String pageNumber, @RequestParam(name="quantity") String quantity)
+	public String updatePool(@RequestParam(name="id") String pageNumber, @RequestParam(name="quantity") String quantity)
 	{
-		List<Recipe> newPool = cookeat_services.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity));
-		return newPool;
+		List<JsonObject> recipes = cookeat_services.toListJson(cookeat_services.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity)));
+		return recipes.toString();
 	}
 	
-	@GetMapping("/ingredient/{recette_id}")
-	public List<R_Ingredient> getIngredient(@PathVariable String recette_id)
-	{
-		List<R_Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
-		return ingredients;
-	}
+//	@GetMapping("/ingredient/{recette_id}")
+//	public List<R_Ingredient> getIngredient(@PathVariable String recette_id)
+//	{
+//		List<R_Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
+//		return ingredients;
+//	}
 	
 //	@GetMapping("/recipes/price/{recipe_id}")
 //	@RequestMapping(value = "/recipes", params = "price")
