@@ -19,6 +19,7 @@ import com.google.gson.JsonObject;
 import com.horizon.cookeat.config.Filter;
 import com.horizon.cookeat.config.Utils;
 import com.horizon.cookeat.entities.Ingredient;
+import com.horizon.cookeat.entities.R_Ingredient;
 import com.horizon.cookeat.entities.Recipe;
 
 @Service
@@ -163,23 +164,23 @@ public class CookEatService {
         return total_price;
 	}
 	
-	public List<Ingredient> getIngredients(int recipe_id)
+	public List<R_Ingredient> getIngredients(int recipe_id)
 	{
 		Session session = sessionFactory.openSession();
         Transaction tx = null;
-        List<Ingredient> ingredients = null;  
+        List<R_Ingredient> ingredients = null;  
         try
     	{
         	tx = session.beginTransaction();
-        	String hql = String.format("SELECT ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
-			Query q = session.createQuery(hql);
+        	String hql = String.format("SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
+			TypedQuery<R_Ingredient> q = session.createQuery(hql, R_Ingredient.class);
         	ingredients = q.getResultList();
-        	for(Object ing : ingredients)
-        	{
-        		System.out.println(ing + " : " + ing.toString());
-        		String jo = Utils.gson.toJson(ing, JsonObject.class);
-        		System.out.println(jo);
-        	}
+//        	for(Object ing : ingredients)
+//        	{
+//        		System.out.println(ing + " : " + ing.toString());
+//        		String jo = Utils.gson.toJson(ing, JsonObject.class);
+//        		System.out.println(jo);
+//        	}
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();

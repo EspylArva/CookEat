@@ -36,11 +36,11 @@ public class Ingredient {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ingredient_generator")
 	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize = 100)
-	private int id;
+	protected int id;
 	@NaturalId
-	private String designation;
-	private String unit;
-	private int price_per_unit;
+	protected String designation;
+	protected String unit;
+	protected int price_per_unit;
 	
 	@OneToMany(
 			fetch = FetchType.EAGER,

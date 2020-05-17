@@ -19,8 +19,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.horizon.cookeat.config.Utils;
-import com.horizon.cookeat.entities.Ingredient;
-import com.horizon.cookeat.entities.Recipe;
+import com.horizon.cookeat.entities.*;
 
 @CrossOrigin
 @RestController
@@ -36,21 +35,22 @@ public class CookEatAPI {
 	   
 	@ResponseBody
 	@RequestMapping(value = "/recipes")
-	public List<JsonObject> fetchAllRecipes() {
+	public String fetchAllRecipes() {
 //		List<Recipe> allRecipes = cookeat_services.fetchAll();
 		List<Recipe> allRecipes = cookeat_services.fetchAllRecipes();
 		List<JsonObject> recipes = new ArrayList<JsonObject>();
 		for(Recipe r : allRecipes)
 		{
 			JsonObject jo = Utils.gson.fromJson(r.toString(), JsonObject.class);
-//			List<Ingredient> r_ing = cookeat_services.getIngredients(r.getId());
-//			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<Recipe>>() {}.getType());
-//			jo.add("ingredients", r_ingredients);
+			List<R_Ingredient> r_ing = cookeat_services.getIngredients(r.getId());
+			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<R_Ingredient>>() {}.getType());
+			System.out.println("--" + r_ingredients.toString());
+			jo.add("ingredients", r_ingredients);
 			System.out.println(jo.toString());
 			recipes.add(jo);
 		}
 //		System.out.println(recipes);
-		return recipes;
+		return recipes.toString();
 	}
 	
 	@RequestMapping(value = "/recipes", params = "id")
@@ -78,9 +78,9 @@ public class CookEatAPI {
 	}
 	
 	@GetMapping("/ingredient/{recette_id}")
-	public List<Ingredient> getIngredient(@PathVariable String recette_id)
+	public List<R_Ingredient> getIngredient(@PathVariable String recette_id)
 	{
-		List<Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
+		List<R_Ingredient> ingredients = cookeat_services.getIngredients(Integer.valueOf(recette_id));
 		return ingredients;
 	}
 	
