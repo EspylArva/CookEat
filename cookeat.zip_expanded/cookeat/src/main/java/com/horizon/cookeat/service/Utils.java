@@ -1,4 +1,4 @@
-package com.horizon.cookeat.config;
+package com.horizon.cookeat.service;
 
 import org.apache.log4j.Logger;
 import org.json.JSONArray;
@@ -7,18 +7,23 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 public class Utils {
 
+//	@Autowired
+//	private static CookEatService service;
+	
 	public static final Logger log = Logger.getLogger(Utils.class);
 	
-	public static Gson gson = new Gson();
+	public static Gson gson = new GsonBuilder()
+			  .excludeFieldsWithoutExposeAnnotation()
+			  .create();
 	
 	public static JSONObject objectToJSONObject(Object object){
 	    Object json = null;
 	    JSONObject jsonObject = null;
 	    try {
-//	    	System.out.println(gson.toJson(object));
 	        json = new JSONTokener(object.toString()).nextValue();
 	    } catch (JSONException e) {
 	        e.printStackTrace();
@@ -42,5 +47,7 @@ public class Utils {
 	    }
 	    return jsonArray;
 	}
+	
+	
 
 }

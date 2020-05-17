@@ -19,10 +19,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.reflect.TypeToken;
 import com.horizon.cookeat.config.Filter;
-import com.horizon.cookeat.config.Utils;
-import com.horizon.cookeat.entities.Ingredient;
-import com.horizon.cookeat.entities.R_Ingredient;
-import com.horizon.cookeat.entities.Recipe;
+import com.horizon.cookeat.entities.*;
 
 @Service
 public class CookEatService {
@@ -49,7 +46,6 @@ public class CookEatService {
 		}
 		finally { session.close(); }
     	return recipes;
-//		return recipeDao.getAllRecipes();
 	}
 	
 
@@ -161,12 +157,6 @@ public class CookEatService {
         	String hql = String.format("SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
 			TypedQuery<R_Ingredient> q = session.createQuery(hql, R_Ingredient.class);
         	ingredients = q.getResultList();
-//        	for(Object ing : ingredients)
-//        	{
-//        		System.out.println(ing + " : " + ing.toString());
-//        		String jo = Utils.gson.toJson(ing, JsonObject.class);
-//        		System.out.println(jo);
-//        	}
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -175,19 +165,66 @@ public class CookEatService {
 		finally { session.close(); }
     	return ingredients;
 	}
+
+
+	public List<Etape> getSteps(Integer recipe_id) {
+		Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        List<Etape> steps = null;  
+        try
+    	{
+        	tx = session.beginTransaction();
+        	String hql = String.format("SELECT etape FROM Etape AS etape WHERE etape.recipe.id = %s ORDER BY etape.step_order ASC", recipe_id);
+			TypedQuery<Etape> q = session.createQuery(hql, Etape.class);
+        	steps = q.getResultList();
+    	}
+        catch (RuntimeException e) {
+		    if (tx != null) tx.rollback();
+		    throw e;
+		}
+		finally { session.close(); }
+    	return steps;
+	}
+	
+	public List<Gallery> getGallery(Integer recipe_id) {
+		Session session = sessionFactory.openSession();
+        Transaction tx = null;
+        List<Gallery> gallery = null;  
+        try
+    	{
+        	tx = session.beginTransaction();
+        	String hql = String.format("SELECT gallery FROM Gallery AS gallery WHERE gallery.recipe.id = %s ORDER BY gallery.id ASC", recipe_id);
+			TypedQuery<Gallery> q = session.createQuery(hql, Gallery.class);
+        	gallery = q.getResultList();
+    	}
+        catch (RuntimeException e) {
+		    if (tx != null) tx.rollback();
+		    throw e;
+		}
+		finally { session.close(); }
+    	return gallery;
+	}
 	
 	public List<JsonObject> toListJson(List<Recipe> allRecipes)
 	{
 		List<JsonObject> recipes = new ArrayList<JsonObject>();
 		for(Recipe r : allRecipes)
 		{
-			JsonObject jo = Utils.gson.fromJson(r.toString(), JsonObject.class);
-			List<R_Ingredient> r_ing = getIngredients(r.getId());
-			JsonElement r_ingredients =  Utils.gson.toJsonTree(r_ing , new TypeToken<List<R_Ingredient>>() {}.getType());
-			jo.add("ingredients", r_ingredients);
-			recipes.add(jo);
+			JsonObject jRecipe = Utils.gson.fromJson(r.toString(), JsonObject.class);
+			List<R_Ingredient> _ri = getIngredients(r.getId());
+			for(R_Ingredient ri : _ri)
+			{
+				System.out.println("--" + ri.getDesignation());
+				System.out.println("Ingredients:" + ri);
+			}
+			jRecipe.add("ingredients", Utils.gson.toJsonTree(_ri, new TypeToken<List<R_Ingredient>>(){}.getType()));
+//			jRecipe.add("list_gallery", Utils.gson.toJsonTree(getGallery(r.getId()), new TypeToken<List<Gallery>>(){}.getType()));
+//			jRecipe.add("list_steps", Utils.gson.toJsonTree(getSteps(r.getId()), new TypeToken<List<Etape>>(){}.getType()));
+			recipes.add(jRecipe);
 		}
 		return recipes;
 	}
+	
+	
 	
 }
