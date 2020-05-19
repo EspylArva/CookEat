@@ -1,11 +1,22 @@
 package com.horizon.cookeat.model;
 
-public class Recipe {
+import java.io.Serializable;
+
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
+public class Recipe implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	// ATTRIBUTES //
-	
+	@Id
 	private int id;
-	private int designation;
+	private String designation;
 	private int prep_time;
 	private int total_price;
 	
@@ -17,10 +28,10 @@ public class Recipe {
 	public void setId(int id) {
 		this.id = id;
 	}
-	public int getDesignation() {
+	public String getDesignation() {
 		return designation;
 	}
-	public void setDesignation(int designation) {
+	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
 	public int getPrep_time() {
