@@ -30,19 +30,21 @@ export function ReceipesProvider({ children }) {
             const response = await fetch(`${configs.apiUrl}/recipes?id=${id ? id : 100}&quantity=${configs.match.quantity}`);
             const recipes = await response.json();
             searchDispatch(success(recipes));
-            localStorage.set('lastRecipeId', recipes.slice(-1)[0].id);
         } catch (e) {
             searchDispatch(failed(e))
         }
     }
 
     useEffect(() => {
-        fetchRecipes();
+        const id = localStorage.getItem('lastRecipeId');
+        console.log(id)
+        fetchRecipes(id);
     }, [])
 
     const like = () => {
         if (searchState.recipes.length !== 0) {
             const recipe = searchState.recipes[0];
+            localStorage.setItem('lastRecipeId', searchState.recipes[1].id);
             searchDispatch(searchLike());
             cookeatDb.basketRecipes.put(recipe);
             fetchRecipes(searchState.recipes.slice(-1)[0].id);
@@ -51,6 +53,7 @@ export function ReceipesProvider({ children }) {
 
     const dislike = () => {
         if (searchState.recipes.length !== 0) {
+            localStorage.setItem('lastRecipeId', searchState.recipes[1].id);
             searchDispatch(searchDislike());
             fetchRecipes(searchState.recipes.slice(-1)[0].id);
         }
