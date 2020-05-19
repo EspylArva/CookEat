@@ -26,29 +26,15 @@ public class Runner {
 	private SessionFactory sessionFactory = new Configuration().configure("generator.cfg.xml").buildSessionFactory();
 	
     @Test
-    public void crud() {
-    	
+    public void crud() {    	
     	try
     	{
     		// DB at: 					http://127.0.0.1:59843/browser/#
     		// Create template data:	https://www.mockaroo.com/
-	    	log.debug("Opening session...");
 	        Session session = sessionFactory.openSession();
 	        Transaction tx = null;
-	        log.debug("Session opened");
-	        log.debug("Creating recipes...");
 	        create();
 	        read();
-	        
-//	        log.debug("Updating tarte aux pommes price...");
-//	        update(session);
-//	        read(session);
-	        
-	        //log.debug("Deleting ratatouille record...");
-	        //delete(session);
-	        //read(session);
-	         
-//	        session.close();
     	}
     	catch(Exception e) { log.debug("Crud: " + e.getMessage()); }
     }
@@ -83,7 +69,6 @@ public class Runner {
     	try
     	{
     		tx = session.beginTransaction();
-//    		session.beginTransaction();
 
     		log.debug("Creating Ingredients");
 	        Ingredient JIMMYon = new Ingredient("kilogramme;kg", "lardon", 700);

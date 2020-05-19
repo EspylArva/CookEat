@@ -43,7 +43,7 @@ public class Ingredient {
 	protected int price_per_unit;
 	
 	@OneToMany(
-			fetch = FetchType.EAGER,
+			fetch = FetchType.LAZY,
 	        mappedBy = "ingredient",
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true
@@ -133,7 +133,4 @@ public class Ingredient {
 	public void setPrice(int price) {
 		this.price_per_unit = price;
 	}
-	
-	
-
 }

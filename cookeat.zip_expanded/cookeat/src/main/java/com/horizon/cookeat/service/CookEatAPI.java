@@ -63,8 +63,6 @@ public class CookEatAPI {
 	{
 		List<Etape> _s = service.getSteps(Integer.valueOf(100));
 		List<Gallery> _g = service.getGallery(Integer.valueOf(100));
-	
-		
 		return null;
 	}	
 }
