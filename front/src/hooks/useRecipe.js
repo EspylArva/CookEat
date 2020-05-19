@@ -34,7 +34,6 @@ function useRecipe(id) {
         try {
             // Offline first
             setRecipe(await cookeatDb.basketRecipes.get(id))
-            console.log(recipe)
             setOfflineLoading(false);
             setError(undefined);
         } catch (e) {

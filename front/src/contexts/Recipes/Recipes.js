@@ -37,7 +37,6 @@ export function ReceipesProvider({ children }) {
 
     useEffect(() => {
         const id = localStorage.getItem('lastRecipeId');
-        console.log(id)
         fetchRecipes(id);
     }, [])
 

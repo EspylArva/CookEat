@@ -44,11 +44,10 @@ function Recipe() {
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
-  console.log(recipe);
   if(!recipe) {
     return ('')
   }
-  
+
   return (
     <div>
       <div>
