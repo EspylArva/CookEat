@@ -9,15 +9,20 @@ import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.google.gson.annotations.Expose;
+
 @Entity
 @Table(name="etape")
 public class Etape {
 	// ATTRIBUTES //
+	@Expose
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "etape_generator")
 	@SequenceGenerator(name="etape_generator", sequenceName = "etape_seq", initialValue = 1000, allocationSize = 100)
 	private int id;
+	@Expose
 	private int step_order;
+	@Expose
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

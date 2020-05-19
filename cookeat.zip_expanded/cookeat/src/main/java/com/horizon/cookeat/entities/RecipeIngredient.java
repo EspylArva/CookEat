@@ -25,11 +25,11 @@ public class RecipeIngredient implements Serializable{
 	@EmbeddedId
     private RecipeIngredientId id;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
     @MapsId("recipeId")
     private Recipe recipe;
  
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("ingredientId")
     private Ingredient ingredient;
  
