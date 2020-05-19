@@ -15,6 +15,7 @@ export const ReceipesContext = createContext();
 
 export function ReceipesProvider({ children }) {
     const [searchState, searchDispatch] = useReducer(searchReducer, {
+        recipes: new Array(),
         liked: false,
         fetching: false,
         error: undefined,
@@ -40,6 +41,9 @@ export function ReceipesProvider({ children }) {
             const recipe = searchState.recipes[0];
             searchDispatch(searchLike());
             cookeatDb.basketRecipes.put(recipe);
+            if(searchState.recipes.length < 5) {
+                fetchRecipes(searchState.recipes.slice(-1)[0].id);
+            }
         }
     }
 

@@ -61,7 +61,7 @@ export default function reducer(state, action) {
                 ...state,
                 fetching: false,
                 error: undefined,
-                recipes: action.payload.recipes
+                recipes: [...state.recipes, ...action.payload.recipes]
             }
         case FAILED:
             return {
