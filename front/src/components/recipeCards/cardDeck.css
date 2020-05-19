@@ -1,0 +1,19 @@
+.card-exit {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+.card-exit-active {
+    opacity: 0;
+    transition: all 500ms ease-out;
+}
+
+.last-liked .card-exit-active {
+    transform-origin: bottom right;
+    transform: translate(50%, 15%) rotate(30deg);
+}
+
+.last-disliked .card-exit-active {
+    transform-origin: bottom left;
+    transform: translate(-150%, 15%) rotate(-30deg);
+}
