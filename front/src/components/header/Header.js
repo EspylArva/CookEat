@@ -1,6 +1,5 @@
 import React from 'react';
 import { AppBar, Toolbar, Typography } from '@material-ui/core';
-import style from './header.css';
 
 
 function Header () {

@@ -4,14 +4,14 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
   
 <hibernate-configuration>
-    <session-factory name="serviceSessionFactory">
+    <session-factory name="generatorSessionFactory">
   
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
         <property name="hibernate.connection.url">jdbc:postgresql://garageisep.com:5432/cookeat</property>
         <property name="hibernate.connection.username">cookeat</property>
         <property name="hibernate.connection.password">Baptiste</property>
-        
+  
         <!-- SQL dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
   
@@ -19,7 +19,7 @@
         <property name="show_sql">true</property>
   
         <!-- Update database on startup -->
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">create-drop</property>
         
         <!-- Annotated entity classes -->
         <mapping class="com.horizon.cookeat.entities.Ingredient"/>

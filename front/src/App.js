@@ -1,11 +1,13 @@
 import React, { Suspense, lazy } from 'react';
 import Header from './components/header/Header';
-import { BrowserRouter, Redirect, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import './App.css';
 
 const Home = lazy(() => import('./routes/Home'));
 const Recipe = lazy(() => import('./routes/Recipe'));
+const Search = lazy(() => import('./routes/Search'));
+const Basket = lazy(() => import('./routes/Basket'));
 
 
 function App() {
@@ -17,6 +19,8 @@ function App() {
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route path = '/recipe' component={Recipe}/>
+              <Route path='/search' component={Search} />
+              <Route path='/basket' component={Basket} />
               <Route path ='/' component={Home} />
             </Switch>
           </Suspense>
