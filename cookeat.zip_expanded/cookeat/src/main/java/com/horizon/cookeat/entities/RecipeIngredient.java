@@ -11,8 +11,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalIdCache;
+
 @Entity(name = "RecipeIngredient")
 @Table(name = "recipe_ingredient")
+@NaturalIdCache
+@Cache(
+    usage = CacheConcurrencyStrategy.READ_WRITE
+)
 public class RecipeIngredient implements Serializable{
 	
 	// ATTRIBUTES //
@@ -40,8 +48,7 @@ public class RecipeIngredient implements Serializable{
     
     @Override
     public boolean equals(Object o) {
-    	if (this == o) return true;
-    	
+    	if (this == o) return true;    	
     	if (o == null || getClass() != o.getClass())
     		return false;
     	

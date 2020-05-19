@@ -41,7 +41,13 @@ public class CookEatAPI {
 	public String fetchRecipe(@RequestParam String id) {
 		List<JsonObject> recipes = service.toListJson(service.fetchRecipe(Integer.valueOf(id)));
 		return recipes.get(0).toString();
-	} 
+	}
+	
+	@GetMapping(value = "/recipes/{id}")
+	public String fetchRecipeById(@PathVariable String id) {
+		List<JsonObject> recipes = service.toListJson(service.fetchRecipe(Integer.valueOf(id)));
+		return recipes.get(0).toString();
+	}
 
 	@RequestMapping(value = "/recipes", params = { "filter", "value" })
 	public String fetchAllRecipesFilteredBy(@RequestParam(name="filter") String filter, @RequestParam(name="value") Object value)
@@ -54,7 +60,8 @@ public class CookEatAPI {
 	@RequestMapping(value = "/recipes", params = { "id", "quantity" })
 	public String updatePool(@RequestParam(name="id") String pageNumber, @RequestParam(name="quantity") String quantity)
 	{
-		List<JsonObject> recipes = service.toListJson(service.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity)));
+		// request: get the n+1-th recipe
+		List<JsonObject> recipes = service.toListJson(service.fetchPool(Integer.valueOf(pageNumber), Integer.valueOf(quantity)+1));
 		return recipes.toString();
 	}
 	
@@ -63,8 +70,6 @@ public class CookEatAPI {
 	{
 		List<Etape> _s = service.getSteps(Integer.valueOf(100));
 		List<Gallery> _g = service.getGallery(Integer.valueOf(100));
-	
-		
 		return null;
 	}	
 }

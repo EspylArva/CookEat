@@ -1,11 +1,12 @@
 package com.horizon.cookeat.entities;
 
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -44,10 +45,12 @@ public class Recipe implements Serializable {
 	private String designation;
 	private int prep_time;
 	private int total_price;
+	private Date start_season;
+	private Date end_season;
 
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-	private transient Set<RecipeIngredient> list_ingredients = new HashSet<>();
-
+	private Set<RecipeIngredient> list_ingredients = new HashSet<>();
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "recipe_equipment", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "equipment_id"))
 	private Set<Equipment> list_equipments = new HashSet<Equipment>();
@@ -58,6 +61,7 @@ public class Recipe implements Serializable {
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Gallery> list_gallery = new HashSet<Gallery>();
 
+	
 	// METHODS //
 	@Override
 	public boolean equals(Object o) {
@@ -183,6 +187,22 @@ public class Recipe implements Serializable {
 
 	public void setTotal_price(int total_price) {
 		this.total_price = total_price;
+	}
+
+	public Date getStart_season() {
+		return start_season;
+	}
+
+	public void setStart_season(Date start_season) {
+		this.start_season = start_season;
+	}
+
+	public Date getEnd_season() {
+		return end_season;
+	}
+
+	public void setEnd_season(Date end_season) {
+		this.end_season = end_season;
 	}
 
 }
