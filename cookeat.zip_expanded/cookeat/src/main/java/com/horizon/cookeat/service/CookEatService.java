@@ -34,7 +34,6 @@ public class CookEatService {
         List<Recipe> recipes = null;  
         try
     	{
-        	Gson gson = new Gson();
         	tx = session.beginTransaction();
         	String hql = "Select _recipe from Recipe as _recipe";
 			TypedQuery<Recipe> q = session.createQuery(hql, Recipe.class);
@@ -79,11 +78,10 @@ public class CookEatService {
     	{
         	tx = session.beginTransaction();
         	String hql = "select _recipe from Recipe as _recipe";
-        	@SuppressWarnings("unchecked")
-			Query<Recipe> q = session.createQuery(hql);
+			TypedQuery<Recipe> q = session.createQuery(hql, Recipe.class);
     		q.setFirstResult(pageNumber - 100); // 100 : starting index of recipes
             q.setMaxResults(quantity);
-        	recipes = q.list();
+        	recipes = q.getResultList();
 
     	}
         catch (RuntimeException e) {
@@ -112,21 +110,18 @@ public class CookEatService {
     			case ALLERGY:
     				log.debug(String.format("Found filter: ALLERGY"));
     				// TODO: To be implemented. See com.horizon.cookeat.entities.allergene and tags
-//    				hqlFilter = String.format("where _recipe.total_price <= %s", filterValue);
     				break;
     			case DIET:
     				log.debug(String.format("Found filter: DIET"));
     				// TODO: To be implemented. See com.horizon.cookeat.entities.allergene and tags
     				break;
     			default:
-    				// No filter, return results unfiltered //
-    				// Could return error/null, but we'd rather give the user some recipes in case the code is buggy
+    				// No filter, return results unfiltered. Could return error/null, but we'd rather give the user some recipes in case the code is buggy
     				break;
     		}        	
         	String hql = String.format("select _recipe from Recipe as _recipe %s", hqlFilter);
-        	@SuppressWarnings("unchecked")
-			Query<Recipe> q = session.createQuery(hql);
-        	recipes = q.list();
+			TypedQuery<Recipe> q = session.createQuery(hql, Recipe.class);
+        	recipes = q.getResultList();
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -136,15 +131,16 @@ public class CookEatService {
     	return recipes;
 	}
 	
-	public int computeTotalPrice(int recipe_id)
+	public int computeTotalPrice(Recipe recipe)
 	{
 		int total_price = 0;
-        for(Ingredient ing : getIngredients(recipe_id))
+        for(Ingredient ing : getIngredients(recipe.getId()))
         {
         	total_price += ing.getPrice();
         }
+        recipe.setTotal_price(total_price);
         return total_price;
-	}
+	}	
 	
 	public List<R_Ingredient> getIngredients(int recipe_id)
 	{
@@ -218,8 +214,8 @@ public class CookEatService {
 				System.out.println("Ingredients:" + ri);
 			}
 			jRecipe.add("ingredients", Utils.gson.toJsonTree(_ri, new TypeToken<List<R_Ingredient>>(){}.getType()));
-//			jRecipe.add("list_gallery", Utils.gson.toJsonTree(getGallery(r.getId()), new TypeToken<List<Gallery>>(){}.getType()));
-//			jRecipe.add("list_steps", Utils.gson.toJsonTree(getSteps(r.getId()), new TypeToken<List<Etape>>(){}.getType()));
+			jRecipe.add("list_gallery", Utils.gson.toJsonTree(getGallery(r.getId()), new TypeToken<List<Gallery>>(){}.getType()));
+			jRecipe.add("list_steps", Utils.gson.toJsonTree(getSteps(r.getId()), new TypeToken<List<Etape>>(){}.getType()));
 			recipes.add(jRecipe);
 		}
 		return recipes;
