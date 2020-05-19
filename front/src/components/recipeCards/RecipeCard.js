@@ -88,13 +88,50 @@ function RecipeCard({
     
   }, []);
 
+  const handleTouchStart = useCallback(({ targetTouches }) => {
+    const { pageX, pageY } = targetTouches[0];
+
+    setDraggingState(state => ({
+      ...state,
+      isDragging: true,
+      origin: {x: pageX, y: pageY}
+    }))
+  }, [])
+
+  const handleTouchMove = useCallback(({ targetTouches }) => {
+    const { pageX, pageY } = targetTouches[0];
+
+    const translation = {x: pageX - draggingState.origin.x, y: pageY - draggingState.origin.y};
+
+    setDraggingState(state => ({
+      ...state,
+      translation
+    }))
+  }, [draggingState.origin]);
+
+  const handleTouchEnd = useCallback(() => {
+    setDraggingState(state => ({
+      ...state,
+      isDragging: false
+    }))
+    
+  }, []);
+
   useEffect(() => {
     if(draggingState.isDragging) {
+      // Mouse events
       window.addEventListener('mousemove', handleMouseMove);
       window.addEventListener('mouseup', handleMouseUp);
+      // Touch events
+      window.addEventListener('touchmove', handleTouchMove);
+      window.addEventListener('touchend', handleTouchEnd)
     } else {
+      // Mouse events
       window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('mouseup', handleMouseUp);
+      // Touch events
+      window.removeEventListener('touchmove', handleTouchMove);
+      window.removeEventListener('touchend', handleTouchEnd)
 
       if(draggingState.translation.x > 100) {
         like();
@@ -104,11 +141,11 @@ function RecipeCard({
         setDraggingState(state => ({...state, translation: ORIGIN}))
       }
     }
-  }, [draggingState.isDragging, handleMouseMove, handleMouseUp]);
+  }, [draggingState.isDragging, handleMouseMove, handleMouseUp, handleTouchMove, handleTouchEnd]);
 
 
   return (
-    <div className={className} onMouseDown={handleMouseDown}>
+    <div className={className} onTouchStart={handleTouchStart} onMouseDown={handleMouseDown}>
       <Card
         style={styles}
         elevation={5} 
