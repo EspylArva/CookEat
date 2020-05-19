@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
 import cookeatDb from '../indexedDb/cookeatDb';
+import { configs } from '../configs/configs';
 
 function useRecipe(id) {
-    const [recipe, setRecipe] = useState([]);
+    const [recipe, setRecipe] = useState(undefined);
     const [loading, setLoading] = useState(false);
     const [offlineloading, setOfflineLoading] = useState(false);
     const [error, setError] = useState(undefined);
@@ -11,9 +12,17 @@ function useRecipe(id) {
     async function loadOnline() {
         setLoading(true);
         try {
-            setRecipe(await cookeatDb[table].get(id))
+            const response = await fetch(`${configs.apiUrl}/recipes/${id}`);
+
+            if(response.status != 200) {
+                throw new Error("The server didn't told us a bad news :'(");
+            }
+
+            const recipe = await response.json();
+            setRecipe(recipe)
             setLoading(false);
             setError(undefined);
+            setOnline(true);
         } catch (e) {
             setLoading(false);
             setError(e);
@@ -24,16 +33,26 @@ function useRecipe(id) {
         setOfflineLoading(true);
         try {
             // Offline first
-            setRecipe(await cookeatDb[table].get(id))
+            setRecipe(await cookeatDb.basketRecipes.get(id))
+            console.log(recipe)
             setOfflineLoading(false);
             setError(undefined);
         } catch (e) {
             setOfflineLoading(false);
             setError(e);
-        } finally {
-            loadOnline();
         }
     }
+
+    async function load() {
+        await loadOffline();
+        await loadOnline();
+    }
+
+    useEffect(() => {
+        load();
+    }, [])
+
+    return [recipe, online, loading, offlineloading, error, load];
 }
 
-export default;
+export default useRecipe
