@@ -40,7 +40,7 @@ public class Ingredient {
 	@NaturalId
 	protected String designation;
 	protected String unit;
-	protected int price_per_unit;
+	protected float price_per_unit;
 	
 	@OneToMany(
 			fetch = FetchType.LAZY,
@@ -74,7 +74,7 @@ public class Ingredient {
 	// CONSTRUCTOR //
     public Ingredient() {}
     
-	public Ingredient(String unit, String designation, int ppu)
+	public Ingredient(String unit, String designation, float ppu)
 	{
 		this.unit = unit;
 		this.designation = designation;
@@ -127,10 +127,10 @@ public class Ingredient {
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public int getPrice() {
+	public float getPrice() {
 		return price_per_unit;
 	}
-	public void setPrice(int price) {
+	public void setPrice(float price) {
 		this.price_per_unit = price;
 	}
 }

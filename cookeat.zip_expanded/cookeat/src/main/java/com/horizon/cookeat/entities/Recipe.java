@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
@@ -43,8 +44,8 @@ public class Recipe implements Serializable {
 	private int id;
 	@NaturalId
 	private String designation;
-	private int prep_time;
-	private int total_price;
+	private float prep_time;
+	private float total_price;
 	private Date start_season;
 	private Date end_season;
 
@@ -93,20 +94,20 @@ public class Recipe implements Serializable {
 	public Recipe() {
 	}
 
-	public Recipe(String designation, int prep_time, int total_price, String path_icon) {
+	public Recipe(String designation, float prep_time, float total_price) {
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
 	}
 
-	public Recipe(String designation, int prep_time, int total_price, String path_icon,
-			Map<Ingredient, Integer> ingredients) {
+	public Recipe(String designation, float prep_time, float total_price,
+			List<R_Ingredient> ingredients) {
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
 
-		for (Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
-			addIngredient(entry.getKey(), entry.getValue());
+		for (R_Ingredient ingredient : ingredients) {
+			addIngredient(new Ingredient(ingredient.getUnit(), ingredient.getDesignation(), ingredient.getPrice()), ingredient.getQuantity());
 		}
 	}
 
@@ -141,8 +142,8 @@ public class Recipe implements Serializable {
 		list_equipments.remove(equipment);
 	}
 
-	public void addIngredient(Ingredient i, int quantity) {
-		RecipeIngredient join = new RecipeIngredient(this, i, quantity);
+	public void addIngredient(Ingredient i, float f) {
+		RecipeIngredient join = new RecipeIngredient(this, i, f);
 		list_ingredients.add(join);
 	}
 
@@ -173,19 +174,19 @@ public class Recipe implements Serializable {
 		this.designation = designation;
 	}
 
-	public int getPrep_time() {
+	public float getPrep_time() {
 		return prep_time;
 	}
 
-	public void setPrep_time(int prep_time) {
+	public void setPrep_time(float prep_time) {
 		this.prep_time = prep_time;
 	}
 
-	public int getTotal_price() {
+	public float getTotal_price() {
 		return total_price;
 	}
 
-	public void setTotal_price(int total_price) {
+	public void setTotal_price(float total_price) {
 		this.total_price = total_price;
 	}
 
@@ -203,6 +204,11 @@ public class Recipe implements Serializable {
 
 	public void setEnd_season(Date end_season) {
 		this.end_season = end_season;
+	}
+
+	public void addGallery(Set<Gallery> recipe_gallery) {
+		this.list_gallery.addAll(recipe_gallery);
+		
 	}
 
 }

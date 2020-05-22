@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
   
 <hibernate-configuration>
-    <session-factory name="generatorSessionFactory">
+    <session-factory>
   
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
@@ -28,6 +28,7 @@
         <mapping class="com.horizon.cookeat.entities.Gallery"/>
         <mapping class="com.horizon.cookeat.entities.Etape"/>
         <mapping class="com.horizon.cookeat.entities.Recipe"/>
+        <mapping class="com.horizon.cookeat.entities.R_Ingredient"/>
         
         <mapping class="com.horizon.cookeat.entities.RecipeIngredient"/>
          
