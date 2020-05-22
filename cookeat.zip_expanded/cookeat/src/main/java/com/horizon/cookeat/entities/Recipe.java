@@ -11,6 +11,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -40,7 +41,8 @@ public class Recipe implements Serializable {
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")
-	@SequenceGenerator(name = "recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize = 100)
+	@SequenceGenerator(name = "recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	@NaturalId
 	private String designation;
@@ -100,38 +102,47 @@ public class Recipe implements Serializable {
 		this.total_price = total_price;
 	}
 
-	public Recipe(String designation, float prep_time, float total_price,
+	public Recipe(int id, String designation, float prep_time, float total_price,
 			List<R_Ingredient> ingredients) {
+		this.id = id;
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
 
 		for (R_Ingredient ingredient : ingredients) {
-			addIngredient(new Ingredient(ingredient.getUnit(), ingredient.getDesignation(), ingredient.getPrice()), ingredient.getQuantity());
+			addIngredient(new Ingredient(ingredient.getId(), ingredient.getUnit(), ingredient.getDesignation(), ingredient.getPrice()), ingredient.getQuantity());
 		}
 	}
 
 	// GETTERS AND SETTERS //
 	public void addGallery(Gallery g) {
-		list_gallery.add(g);
+		this.list_gallery.add(g);
 		g.setRecipe(this);
 	}
 
 	public void removeGallery(Gallery g) {
 		g.setRecipe(null);
-		list_gallery.remove(g);
+		this.list_gallery.remove(g);
+	}
+	
+	public Set<Gallery> getGallery()
+	{
+		return this.list_gallery;
 	}
 
 	public void addStep(Etape s) {
 		s.setRecipe(this);
 		list_steps.add(s);
-//		list_steps.put(s.getOrder(), s);
 	}
 
 	public void removeStep(Etape s) {
 		s.setRecipe(null);
 		list_steps.remove(s);
-//		list_steps.remove(s.getOrder());
+	}
+	
+	public Set<Etape> getStep()
+	{
+		return this.list_steps;
 	}
 
 	public void addEquipment(Equipment equipment) {
@@ -140,6 +151,10 @@ public class Recipe implements Serializable {
 
 	public void removeEquipment(Equipment equipment) {
 		list_equipments.remove(equipment);
+	}
+	public Set<Equipment> getEquipment()
+	{
+		return this.list_equipments;
 	}
 
 	public void addIngredient(Ingredient i, float f) {
@@ -156,6 +171,10 @@ public class Recipe implements Serializable {
 				join.setIngredient(null);
 			}
 		}
+	}
+	public Set<RecipeIngredient> getIngredient()
+	{
+		return this.list_ingredients;
 	}
 
 	public int getId() {

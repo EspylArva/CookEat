@@ -1,5 +1,7 @@
 package com.horizon.cookeat;
 
+import static org.junit.Assert.*;
+
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
@@ -51,17 +53,34 @@ public class Runner {
     		{			
     			JsonObject json_recipe = subEle.getAsJsonObject();
     			System.out.println(json_recipe);
+    			
     			JsonArray list_gallery = json_recipe.get("list_gallery").getAsJsonArray();
     			Set<Gallery> recipe_gallery = gson.fromJson(list_gallery, new TypeToken<Set<Gallery>>() {}.getType());
-    			JsonArray list_ingredients = json_recipe.get("list_ingredients").getAsJsonArray();
-    			List<R_Ingredient> recipe_ingredients = gson.fromJson(list_ingredients, new TypeToken<List<R_Ingredient>>() {}.getType());
+    			for(Gallery gal : recipe_gallery){ 
+//    				System.out.println(gal.toString());
+    				session.save(gal); 
+				}
+//    			for(JsonElement ing : list_ingredients){ System.out.println(ing.getAsJsonObject().get("id")); }
+
     			
-    			Recipe recipe = new Recipe(json_recipe.get("designation").getAsString(),
+    			System.out.println("================");
+    			
+    			JsonArray list_ingredients = json_recipe.get("ingredients").getAsJsonArray();
+    			List<R_Ingredient> recipe_ingredients = gson.fromJson(list_ingredients, new TypeToken<List<R_Ingredient>>() {}.getType());
+    			for(R_Ingredient ing : recipe_ingredients){ session.save(ing); }
+    			
+    			Recipe recipe = new Recipe(
+    					json_recipe.get("id").getAsInt(),
+    					json_recipe.get("designation").getAsString(),
     					json_recipe.get("prep_time").getAsFloat(),
     					json_recipe.get("total_price").getAsFloat(),
     					recipe_ingredients);
     			recipe.addGallery(recipe_gallery);
+//    			assertTrue(recipe.getIngredient().size() == recipe_ingredients.size());
+//    			assertTrue(recipe.getGallery().size() == recipe_gallery.size());
+//    			assertTrue(recipe.getSteps().size() == recipe_steps.size());
     			session.save(recipe);
+    			log.debug("SUCCESSFULLY SAVED " + recipe.getDesignation());
     		}
     		System.out.println("Commiting recipes");
 	        tx.commit();
@@ -121,9 +140,9 @@ public class Runner {
     		tx = session.beginTransaction();
 
     		log.debug("Creating Ingredients");
-	        Ingredient JIMMYon = new Ingredient("kilogramme;kg", "lardon", 700);
-    		Ingredient patrick = new Ingredient("kilogramme;kg", "pate", 500);
-    		Ingredient pomXML = new Ingredient("kilogramme;kg", "pomme", 600);
+	        Ingredient JIMMYon = new Ingredient(200, "kilogramme;kg", "lardon", 700);
+    		Ingredient patrick = new Ingredient(201, "kilogramme;kg", "pate", 500);
+    		Ingredient pomXML = new Ingredient(202, "kilogramme;kg", "pomme", 600);
 
     		log.debug("Creating Recipes");
 	        Recipe patesCarbo = new Recipe("Pates a la carbonara", 15, 500);

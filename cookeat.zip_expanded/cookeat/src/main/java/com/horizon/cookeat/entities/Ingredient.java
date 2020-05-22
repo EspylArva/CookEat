@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,7 +36,8 @@ public class Ingredient {
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ingredient_generator")
-	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize = 100)
+	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	protected int id;
 	@NaturalId
 	protected String designation;
@@ -74,12 +76,20 @@ public class Ingredient {
 	// CONSTRUCTOR //
     public Ingredient() {}
     
-	public Ingredient(String unit, String designation, float ppu)
+    public Ingredient(int id, String unit, String designation, float ppu)
 	{
+    	this.id = id;
 		this.unit = unit;
 		this.designation = designation;
 		this.price_per_unit = ppu;
 	}
+    
+//    public Ingredient(String unit, String designation, float ppu)
+//	{
+//		this.unit = unit;
+//		this.designation = designation;
+//		this.price_per_unit = ppu;
+//	}
 	
 	// GETTERS AND SETTERS //
 	public void addAllergene(Allergene a)
@@ -90,7 +100,7 @@ public class Ingredient {
 	{
 		list_allergenes.remove(a);
 	}
-	public void addRecipe(Recipe r, int quantity)
+	public void addRecipe(Recipe r, float quantity)
 	{
 		RecipeIngredient join = new RecipeIngredient(r, this, quantity);
 		list_recipes.add(join);
