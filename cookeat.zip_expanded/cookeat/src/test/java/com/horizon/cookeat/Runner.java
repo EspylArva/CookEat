@@ -36,7 +36,6 @@ import com.horizon.cookeat.service.Utils;
 public class Runner {
 	
 	private final Logger log = Logger.getLogger(this.getClass());
-//	private EntityManagerFactory entityManagerFactory;
 	private SessionFactory sessionFactory = new Configuration().configure("generator.cfg.xml").buildSessionFactory();
 	
 	@Test
