@@ -53,7 +53,7 @@ function CardDeck({recipes, className}) {
             <div className={`${className}`}>
                 <div className={classes.stateIndicator}>
                     <CloudOffIcon fontSize="large" />
-                    <em className={classes.stateIndicatorMessage}>Oups ! Il semble que vous n'arriez pas à communiquer avec notre serveur. Essayer de recharger la page.</em>
+                    <em className={classes.stateIndicatorMessage}>Oups ! Il semble que vous n'arrivez pas à communiquer avec notre serveur. Essayer de recharger la page.</em>
                 </div>
             </div>
         )
