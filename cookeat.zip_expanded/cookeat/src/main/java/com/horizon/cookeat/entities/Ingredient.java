@@ -39,7 +39,7 @@ public class Ingredient {
 	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize=2)
 	@Column(name="id", updatable = false, nullable = false)
 	protected int id;
-	@NaturalId
+//	@NaturalId
 	protected String designation;
 	protected String unit;
 	protected float price_per_unit;
@@ -84,12 +84,12 @@ public class Ingredient {
 		this.price_per_unit = ppu;
 	}
     
-//    public Ingredient(String unit, String designation, float ppu)
-//	{
-//		this.unit = unit;
-//		this.designation = designation;
-//		this.price_per_unit = ppu;
-//	}
+    public Ingredient(String unit, String designation, float ppu)
+	{
+		this.unit = unit;
+		this.designation = designation;
+		this.price_per_unit = ppu;
+	}
 	
 	// GETTERS AND SETTERS //
 	public void addAllergene(Allergene a)

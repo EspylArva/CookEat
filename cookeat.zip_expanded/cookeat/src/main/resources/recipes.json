@@ -202,10 +202,10 @@
         "price_per_unit": "0.52"
       },
       {
-        "id": 217,
+        "id": 201,
         "quantity": "6",
         "designation": "eggs",
-        "price_per_unit": "1.71"
+        "price_per_unit": "0.36"
       },
       {
         "id": 218,
@@ -1338,7 +1338,7 @@
     "total_price": 8,
     "ingredients": [
       {
-        "id": 304,
+        "id": 201,
         "quantity": "7",
         "designation": "eggs",
         "price_per_unit": "2.97"

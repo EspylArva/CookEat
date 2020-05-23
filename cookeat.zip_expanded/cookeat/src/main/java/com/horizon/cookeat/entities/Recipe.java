@@ -2,6 +2,7 @@ package com.horizon.cookeat.entities;
 
 import java.io.Serializable;
 import java.sql.Date;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "recipe")
@@ -48,8 +50,10 @@ public class Recipe implements Serializable {
 	private String designation;
 	private float prep_time;
 	private float total_price;
-	private Date start_season;
-	private Date end_season;
+	@Range(min = 0, max = 11)
+	private int start_season;
+	@Range(min = 0, max = 11)
+	private int end_season;
 
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<RecipeIngredient> list_ingredients = new HashSet<>();
@@ -103,7 +107,7 @@ public class Recipe implements Serializable {
 	}
 
 	public Recipe(int id, String designation, float prep_time, float total_price,
-			List<R_Ingredient> ingredients) {
+			Collection<R_Ingredient> ingredients) {
 		this.id = id;
 		this.designation = designation;
 		this.prep_time = prep_time;
@@ -209,25 +213,34 @@ public class Recipe implements Serializable {
 		this.total_price = total_price;
 	}
 
-	public Date getStart_season() {
+	public int getStart_season() {
 		return start_season;
 	}
 
-	public void setStart_season(Date start_season) {
+	public void setStart_season(int start_season) {
 		this.start_season = start_season;
 	}
 
-	public Date getEnd_season() {
+	public int getEnd_season() {
 		return end_season;
 	}
 
-	public void setEnd_season(Date end_season) {
+	public void setEnd_season(int end_season) {
 		this.end_season = end_season;
 	}
 
-	public void addGallery(Set<Gallery> recipe_gallery) {
-		this.list_gallery.addAll(recipe_gallery);
-		
+	public void addGallery(Collection<Gallery> recipe_gallery) {
+		for(Gallery img : recipe_gallery)
+		{
+			addGallery(img);
+		}
+	}
+	
+	public void addStep(Collection<Etape> recipe_steps) {
+		for(Etape step : recipe_steps)
+		{
+			addStep(step);
+		}
 	}
 
 }

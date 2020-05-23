@@ -29,7 +29,6 @@
         <mapping class="com.horizon.cookeat.entities.Gallery"/>
         <mapping class="com.horizon.cookeat.entities.Etape"/>
         <mapping class="com.horizon.cookeat.entities.Recipe"/>
-        <mapping class="com.horizon.cookeat.entities.R_Ingredient"/>
         
         <mapping class="com.horizon.cookeat.entities.RecipeIngredient"/>
          

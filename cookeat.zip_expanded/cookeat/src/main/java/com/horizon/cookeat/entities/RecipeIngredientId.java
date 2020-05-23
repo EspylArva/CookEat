@@ -44,7 +44,6 @@ public class RecipeIngredientId implements Serializable
     
     public RecipeIngredientId(int r_id, int i_id)
     {
-    	System.out.println(r_id + "--" + i_id);
     	this.recipeId = r_id;
     	this.ingredientId = i_id;
     }

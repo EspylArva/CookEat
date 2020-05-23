@@ -1,17 +1,18 @@
 package com.horizon.cookeat;
 
-import static org.junit.Assert.*;
-
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 import javax.persistence.TypedQuery;
 
 import org.apache.log4j.Logger;
+import org.assertj.core.util.Arrays;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -46,41 +47,47 @@ public class Runner {
 		JsonArray je = gson.fromJson(reader, JsonArray.class);
 		Session session = sessionFactory.openSession();
     	Transaction tx = null;
+    	tx = session.beginTransaction();
     	try
     	{
-    		tx = session.beginTransaction();
     		for(JsonElement subEle : je)
     		{			
     			JsonObject json_recipe = subEle.getAsJsonObject();
-    			System.out.println(json_recipe);
     			
     			JsonArray list_gallery = json_recipe.get("list_gallery").getAsJsonArray();
     			Set<Gallery> recipe_gallery = gson.fromJson(list_gallery, new TypeToken<Set<Gallery>>() {}.getType());
-    			for(Gallery gal : recipe_gallery){ 
-//    				System.out.println(gal.toString());
-    				session.save(gal); 
+    			for(Gallery image : recipe_gallery){ 
+    				session.save(image); 
 				}
-//    			for(JsonElement ing : list_ingredients){ System.out.println(ing.getAsJsonObject().get("id")); }
+    			
+    			JsonArray list_steps = json_recipe.get("list_steps").getAsJsonArray();
+    			Set<Etape> recipe_steps = gson.fromJson(list_steps, new TypeToken<Set<Etape>>() {}.getType());
+    			for(Etape step : recipe_steps){ 
+    				session.save(step);
+				}
 
     			
-    			System.out.println("================");
-    			
     			JsonArray list_ingredients = json_recipe.get("ingredients").getAsJsonArray();
-    			List<R_Ingredient> recipe_ingredients = gson.fromJson(list_ingredients, new TypeToken<List<R_Ingredient>>() {}.getType());
-    			for(R_Ingredient ing : recipe_ingredients){ session.save(ing); }
+    			HashSet<R_Ingredient> recipe_ingredients = gson.fromJson(list_ingredients, new TypeToken<HashSet<R_Ingredient>>() {}.getType());
+    			for(R_Ingredient ing : recipe_ingredients){ 
+    				System.out.println(ing.getDesignation());
+    				session.saveOrUpdate(new Ingredient(ing.getUnit(),ing.getDesignation(), ing.getPrice_per_unit()));
+				}
+    			
     			
     			Recipe recipe = new Recipe(
     					json_recipe.get("id").getAsInt(),
     					json_recipe.get("designation").getAsString(),
     					json_recipe.get("prep_time").getAsFloat(),
     					json_recipe.get("total_price").getAsFloat(),
-    					recipe_ingredients);
+    					recipe_ingredients
+    					);
+    			
     			recipe.addGallery(recipe_gallery);
-//    			assertTrue(recipe.getIngredient().size() == recipe_ingredients.size());
-//    			assertTrue(recipe.getGallery().size() == recipe_gallery.size());
-//    			assertTrue(recipe.getSteps().size() == recipe_steps.size());
+    			recipe.addStep(recipe_steps);
+
     			session.save(recipe);
-    			log.debug("SUCCESSFULLY SAVED " + recipe.getDesignation());
+    			log.debug("SAVED " + recipe.getDesignation());
     		}
     		System.out.println("Commiting recipes");
 	        tx.commit();

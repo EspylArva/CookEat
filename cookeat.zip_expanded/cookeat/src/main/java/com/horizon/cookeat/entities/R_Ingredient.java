@@ -27,11 +27,11 @@ public class R_Ingredient  extends Ingredient{
 	{
 		return (
 				"{"
-				+ "\t id: " + id +
-				"\t designation: " + designation +
-				"\t unit: " + unit +
-				"\t price_per_unit: " + price_per_unit +
-				"\t quantity: " + quantity +
+				+ "\t id: " + id + '\n' +
+				"\t designation: " + designation +'\n' +
+				"\t unit: " + unit +'\n' +
+				"\t price_per_unit: " + price_per_unit +'\n' +
+				"\t quantity: " + quantity +'\n' +
 				"}"
 				);
 				
