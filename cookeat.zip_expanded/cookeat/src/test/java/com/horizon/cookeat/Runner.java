@@ -80,6 +80,8 @@ public class Runner {
     					json_recipe.get("designation").getAsString(),
     					json_recipe.get("prep_time").getAsFloat(),
     					json_recipe.get("total_price").getAsFloat(),
+    					json_recipe.get("start_season").getAsInt(),
+    					json_recipe.get("end_season").getAsInt(),
     					recipe_ingredients
     					);
     			

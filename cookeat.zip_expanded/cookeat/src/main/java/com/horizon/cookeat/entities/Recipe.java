@@ -91,9 +91,11 @@ public class Recipe implements Serializable {
 				"	\"id\":%s,\r\n" + 
 				"	\"designation\": \"%s\",\r\n" + 
 				"	\"prep_time\": %s,\r\n" + 
-				"	\"total_price\": %s\r\n" +
+				"	\"total_price\": %s,\r\n" +
+				"	\"start_season\": %s,\r\n" +
+				"	\"end_season\": %s\r\n" +
 				"}"
-				, this.id, this.designation, this.prep_time, this.total_price);
+				, this.id, this.designation, this.prep_time, this.total_price, this.start_season, this.end_season);
 	}
 
 	// CONSTRUCTOR //
@@ -106,12 +108,14 @@ public class Recipe implements Serializable {
 		this.total_price = total_price;
 	}
 
-	public Recipe(int id, String designation, float prep_time, float total_price,
+	public Recipe(int id, String designation, float prep_time, float total_price, int start_season, int end_season,
 			Collection<R_Ingredient> ingredients) {
 		this.id = id;
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
+		this.start_season = start_season;
+		this.end_season = end_season;
 
 		for (R_Ingredient ingredient : ingredients) {
 			addIngredient(new Ingredient(ingredient.getId(), ingredient.getUnit(), ingredient.getDesignation(), ingredient.getPrice()), ingredient.getQuantity());
