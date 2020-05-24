@@ -8,7 +8,7 @@ import MenuBook from '@material-ui/icons/MenuBook';
 import IngredientScreen from '../components/recipe/IngredientScreen.js';
 import InformationScreen from '../components/recipe/InformationScreen.js'
 import EtapeScreen from '../components/recipe/EtapeScreen.js'
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import useRecipe from '../hooks/useRecipe';
 
@@ -22,6 +22,7 @@ const useStyles = makeStyles({
     bottom: 0,
     left: 0,
     right: 0,
+    zIndex:10,
   },
   footer: {
     backgroundColor: '#669933',
@@ -37,16 +38,22 @@ const useStyles = makeStyles({
   default: {
     maxWidth: "1000px"
   },
+  bottomDiv:{
+    height: "50px"
+  }
 });
 
 function Recipe() {
-  const [recipe, online, loading, offlineloading, error, load] = useRecipe(100);
+  const {recipeID} = useParams() 
+  const [recipe, online, loading, offlineloading, error, load] = useRecipe(recipeID);
   const classes = useStyles();
   const [value, setValue] = React.useState(0);
 
   if(!recipe) {
     return ('No recipe found')
   }
+
+  
 
   return (
     <div>
@@ -56,13 +63,14 @@ function Recipe() {
         </h2>
         <div>
           <Switch>
-            <Route path='/recipe/informations' component={InformationScreen}></Route>
-            <Route path='/recipe/ingredients' component={IngredientScreen}></Route>
-            <Route path='/recipe/etape' component={EtapeScreen}></Route>
+            <Route path='/recipe/:recipeID/informations' component={InformationScreen}></Route>
+            <Route path='/recipe/:recipeID/ingredients' component={IngredientScreen}></Route>
+            <Route path='/recipe/:recipeID/etape' component={EtapeScreen}></Route>
           </Switch>
 
         </div>
       </div>
+      <div></div>
       <BottomNavigation
         value={value}
         onChange={(event, newValue) => {
@@ -75,17 +83,18 @@ function Recipe() {
       >
         <BottomNavigationAction
           component={Link}
-          to="/recipe/informations"
+          to={`/recipe/${recipeID}/informations`}
           icon={<MenuBook />}
-          label="Information" />
+          label="Information"
+          selected />
         <BottomNavigationAction
           component={Link}
-          to="/recipe/ingredients"
+          to={`/recipe/${recipeID}/ingredients`}
           icon={<LocalGroceryStore />}
           label="Ingredient" />
         <BottomNavigationAction
           component={Link}
-          to="/recipe/etape"
+          to={`/recipe/${recipeID}/etape`}
           icon={<List />}
           label="Etape" />
       </BottomNavigation>

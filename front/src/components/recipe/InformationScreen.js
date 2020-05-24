@@ -5,6 +5,8 @@ import { Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
+import {useParams} from "react-router-dom";
+import useRecipe from '../../hooks/useRecipe';
 
 const total_price = 2;
 const prep_time = 15;
@@ -25,11 +27,17 @@ const useStyles = makeStyles({
 
 
 function InformationScreen(){
+    let { recipeID } = useParams();
+    const recipe = useRecipe(102);
     const classes = useStyles();
-
+    if(!recipe) {
+        return ('No recipe found')
+    }
+    console.log("WO " + recipe.id)
     //make a max width 
     return(
         <div>
+            <p>{recipe.designation}</p>
                 <AwesomeSlider className={classes.img}> 
                 <div data-src="/local_test_res/coquillettes_1.jpg" />
                 <div data-src="/local_test_res/coquillettes_2.jpg" />

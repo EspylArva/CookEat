@@ -18,7 +18,7 @@ function App() {
         <Container className="container">
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
-              <Route path = '/recipe' component={Recipe}/>
+              <Route path = '/recipe/:recipeID' component={Recipe}/>
               <Route path='/search' component={Search} />
               <Route path='/basket' component={Basket} />
               <Route path ='/' component={Home} />
