@@ -162,10 +162,9 @@ public class CookEatService {
     	{
         	tx = session.beginTransaction();
         	String hql = String.format(
-        			"SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
+        			"SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.unit, ingredient.designation, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
 			TypedQuery<R_Ingredient> q = session.createQuery(hql, R_Ingredient.class);
         	ingredients = q.getResultList();
-//        	System.out.println(ingredients.size());
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
