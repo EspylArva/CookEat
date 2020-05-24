@@ -11,8 +11,16 @@ import javax.persistence.ManyToOne;
 import javax.persistence.MapsId;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+import org.hibernate.annotations.NaturalIdCache;
+
 @Entity(name = "RecipeIngredient")
 @Table(name = "recipe_ingredient")
+@NaturalIdCache
+@Cache(
+    usage = CacheConcurrencyStrategy.READ_WRITE
+)
 public class RecipeIngredient implements Serializable{
 	
 	// ATTRIBUTES //
@@ -34,14 +42,13 @@ public class RecipeIngredient implements Serializable{
     private Ingredient ingredient;
  
     @Column(name = "quantity")
-    private int quantity;
+    private float quantity;
  
     // METHODS //
     
     @Override
     public boolean equals(Object o) {
-    	if (this == o) return true;
-    	
+    	if (this == o) return true;    	
     	if (o == null || getClass() != o.getClass())
     		return false;
     	
@@ -58,7 +65,7 @@ public class RecipeIngredient implements Serializable{
     // CONSTRUCTOR //
     public RecipeIngredient() {}
     
-    public RecipeIngredient(Recipe r, Ingredient i, int quantity) {
+    public RecipeIngredient(Recipe r, Ingredient i, float quantity) {
         this.recipe = r;
         this.ingredient = i;
 
@@ -93,11 +100,11 @@ public class RecipeIngredient implements Serializable{
 		this.ingredient = ingredient;
 	}
 
-	public int getQuantity() {
+	public float getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(int quantity) {
+	public void setQuantity(float quantity) {
 		this.quantity = quantity;
 	}
 

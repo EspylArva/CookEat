@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -35,15 +36,16 @@ public class Ingredient {
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "ingredient_generator")
-	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize = 100)
+	@SequenceGenerator(name="ingredient_generator", sequenceName = "ingredient_seq", initialValue = 200, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	protected int id;
-	@NaturalId
+//	@NaturalId
 	protected String designation;
 	protected String unit;
-	protected int price_per_unit;
+	protected float price_per_unit;
 	
 	@OneToMany(
-			fetch = FetchType.EAGER,
+			fetch = FetchType.LAZY,
 	        mappedBy = "ingredient",
 	        cascade = CascadeType.ALL,
 	        orphanRemoval = true
@@ -74,7 +76,15 @@ public class Ingredient {
 	// CONSTRUCTOR //
     public Ingredient() {}
     
-	public Ingredient(String unit, String designation, int ppu)
+    public Ingredient(int id, String unit, String designation, float ppu)
+	{
+    	this.id = id;
+		this.unit = unit;
+		this.designation = designation;
+		this.price_per_unit = ppu;
+	}
+    
+    public Ingredient(String unit, String designation, float ppu)
 	{
 		this.unit = unit;
 		this.designation = designation;
@@ -90,7 +100,7 @@ public class Ingredient {
 	{
 		list_allergenes.remove(a);
 	}
-	public void addRecipe(Recipe r, int quantity)
+	public void addRecipe(Recipe r, float quantity)
 	{
 		RecipeIngredient join = new RecipeIngredient(r, this, quantity);
 		list_recipes.add(join);
@@ -127,13 +137,10 @@ public class Ingredient {
 	public void setDesignation(String designation) {
 		this.designation = designation;
 	}
-	public int getPrice() {
+	public float getPrice() {
 		return price_per_unit;
 	}
-	public void setPrice(int price) {
+	public void setPrice(float price) {
 		this.price_per_unit = price;
 	}
-	
-	
-
 }

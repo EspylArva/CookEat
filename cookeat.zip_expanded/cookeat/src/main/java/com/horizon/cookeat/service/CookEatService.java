@@ -82,6 +82,17 @@ public class CookEatService {
     		q.setFirstResult(pageNumber - 100); // 100 : starting index of recipes
             q.setMaxResults(quantity);
         	recipes = q.getResultList();
+        	
+        	System.out.println("SIZE OF THE POOL: " + recipes.size());
+        	
+        	if(recipes.size() < quantity)
+        	{
+        		recipes.addAll(fetchPool(100, quantity - recipes.size()));
+        	}
+        	else
+        	{
+        		// Nothing happens //
+        	}
 
     	}
         catch (RuntimeException e) {
@@ -150,9 +161,11 @@ public class CookEatService {
         try
     	{
         	tx = session.beginTransaction();
-        	String hql = String.format("SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
+        	String hql = String.format(
+        			"SELECT NEW com.horizon.cookeat.entities.R_Ingredient(ingredient.id, ingredient.designation, ingredient.unit, ingredient.price_per_unit, recipe_ingredient.quantity) FROM Ingredient ingredient INNER JOIN FETCH RecipeIngredient recipe_ingredient ON ingredient.id = recipe_ingredient.ingredient.id WHERE recipe_ingredient.recipe.id = %s", recipe_id);
 			TypedQuery<R_Ingredient> q = session.createQuery(hql, R_Ingredient.class);
         	ingredients = q.getResultList();
+//        	System.out.println(ingredients.size());
     	}
         catch (RuntimeException e) {
 		    if (tx != null) tx.rollback();
@@ -208,19 +221,11 @@ public class CookEatService {
 		{
 			JsonObject jRecipe = Utils.gson.fromJson(r.toString(), JsonObject.class);
 			List<R_Ingredient> _ri = getIngredients(r.getId());
-			for(R_Ingredient ri : _ri)
-			{
-				System.out.println("--" + ri.getDesignation());
-				System.out.println("Ingredients:" + ri);
-			}
 			jRecipe.add("ingredients", Utils.gson.toJsonTree(_ri, new TypeToken<List<R_Ingredient>>(){}.getType()));
 			jRecipe.add("list_gallery", Utils.gson.toJsonTree(getGallery(r.getId()), new TypeToken<List<Gallery>>(){}.getType()));
 			jRecipe.add("list_steps", Utils.gson.toJsonTree(getSteps(r.getId()), new TypeToken<List<Etape>>(){}.getType()));
 			recipes.add(jRecipe);
 		}
 		return recipes;
-	}
-	
-	
-	
+	}	
 }

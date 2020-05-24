@@ -1,14 +1,18 @@
 package com.horizon.cookeat.entities;
 
 import java.io.Serializable;
+import java.sql.Date;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Map.Entry;
+import java.util.Objects;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,6 +28,7 @@ import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.NaturalId;
 import org.hibernate.annotations.NaturalIdCache;
+import org.hibernate.validator.constraints.Range;
 
 @Entity
 @Table(name = "recipe")
@@ -38,16 +43,21 @@ public class Recipe implements Serializable {
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "recipe_generator")
-	@SequenceGenerator(name = "recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize = 100)
+	@SequenceGenerator(name = "recipe_generator", sequenceName = "recipe_seq", initialValue = 100, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	@NaturalId
 	private String designation;
-	private int prep_time;
-	private int total_price;
+	private float prep_time;
+	private float total_price;
+	@Range(min = 0, max = 11)
+	private int start_season;
+	@Range(min = 0, max = 11)
+	private int end_season;
 
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
-	private transient Set<RecipeIngredient> list_ingredients = new HashSet<>();
-
+	private Set<RecipeIngredient> list_ingredients = new HashSet<>();
+	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE })
 	@JoinTable(name = "recipe_equipment", joinColumns = @JoinColumn(name = "recipe_id"), inverseJoinColumns = @JoinColumn(name = "equipment_id"))
 	private Set<Equipment> list_equipments = new HashSet<Equipment>();
@@ -58,6 +68,7 @@ public class Recipe implements Serializable {
 	@OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
 	private Set<Gallery> list_gallery = new HashSet<Gallery>();
 
+	
 	// METHODS //
 	@Override
 	public boolean equals(Object o) {
@@ -80,53 +91,66 @@ public class Recipe implements Serializable {
 				"	\"id\":%s,\r\n" + 
 				"	\"designation\": \"%s\",\r\n" + 
 				"	\"prep_time\": %s,\r\n" + 
-				"	\"total_price\": %s\r\n" +
+				"	\"total_price\": %s,\r\n" +
+				"	\"start_season\": %s,\r\n" +
+				"	\"end_season\": %s\r\n" +
 				"}"
-				, this.id, this.designation, this.prep_time, this.total_price);
+				, this.id, this.designation, this.prep_time, this.total_price, this.start_season, this.end_season);
 	}
 
 	// CONSTRUCTOR //
 	public Recipe() {
 	}
 
-	public Recipe(String designation, int prep_time, int total_price, String path_icon) {
+	public Recipe(String designation, float prep_time, float total_price) {
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
 	}
 
-	public Recipe(String designation, int prep_time, int total_price, String path_icon,
-			Map<Ingredient, Integer> ingredients) {
+	public Recipe(int id, String designation, float prep_time, float total_price, int start_season, int end_season,
+			Collection<R_Ingredient> ingredients) {
+		this.id = id;
 		this.designation = designation;
 		this.prep_time = prep_time;
 		this.total_price = total_price;
+		this.start_season = start_season;
+		this.end_season = end_season;
 
-		for (Entry<Ingredient, Integer> entry : ingredients.entrySet()) {
-			addIngredient(entry.getKey(), entry.getValue());
+		for (R_Ingredient ingredient : ingredients) {
+			addIngredient(new Ingredient(ingredient.getId(), ingredient.getUnit(), ingredient.getDesignation(), ingredient.getPrice()), ingredient.getQuantity());
 		}
 	}
 
 	// GETTERS AND SETTERS //
 	public void addGallery(Gallery g) {
-		list_gallery.add(g);
+		this.list_gallery.add(g);
 		g.setRecipe(this);
 	}
 
 	public void removeGallery(Gallery g) {
 		g.setRecipe(null);
-		list_gallery.remove(g);
+		this.list_gallery.remove(g);
+	}
+	
+	public Set<Gallery> getGallery()
+	{
+		return this.list_gallery;
 	}
 
 	public void addStep(Etape s) {
 		s.setRecipe(this);
 		list_steps.add(s);
-//		list_steps.put(s.getOrder(), s);
 	}
 
 	public void removeStep(Etape s) {
 		s.setRecipe(null);
 		list_steps.remove(s);
-//		list_steps.remove(s.getOrder());
+	}
+	
+	public Set<Etape> getStep()
+	{
+		return this.list_steps;
 	}
 
 	public void addEquipment(Equipment equipment) {
@@ -136,9 +160,13 @@ public class Recipe implements Serializable {
 	public void removeEquipment(Equipment equipment) {
 		list_equipments.remove(equipment);
 	}
+	public Set<Equipment> getEquipment()
+	{
+		return this.list_equipments;
+	}
 
-	public void addIngredient(Ingredient i, int quantity) {
-		RecipeIngredient join = new RecipeIngredient(this, i, quantity);
+	public void addIngredient(Ingredient i, float f) {
+		RecipeIngredient join = new RecipeIngredient(this, i, f);
 		list_ingredients.add(join);
 	}
 
@@ -151,6 +179,10 @@ public class Recipe implements Serializable {
 				join.setIngredient(null);
 			}
 		}
+	}
+	public Set<RecipeIngredient> getIngredient()
+	{
+		return this.list_ingredients;
 	}
 
 	public int getId() {
@@ -169,20 +201,50 @@ public class Recipe implements Serializable {
 		this.designation = designation;
 	}
 
-	public int getPrep_time() {
+	public float getPrep_time() {
 		return prep_time;
 	}
 
-	public void setPrep_time(int prep_time) {
+	public void setPrep_time(float prep_time) {
 		this.prep_time = prep_time;
 	}
 
-	public int getTotal_price() {
+	public float getTotal_price() {
 		return total_price;
 	}
 
-	public void setTotal_price(int total_price) {
+	public void setTotal_price(float total_price) {
 		this.total_price = total_price;
+	}
+
+	public int getStart_season() {
+		return start_season;
+	}
+
+	public void setStart_season(int start_season) {
+		this.start_season = start_season;
+	}
+
+	public int getEnd_season() {
+		return end_season;
+	}
+
+	public void setEnd_season(int end_season) {
+		this.end_season = end_season;
+	}
+
+	public void addGallery(Collection<Gallery> recipe_gallery) {
+		for(Gallery img : recipe_gallery)
+		{
+			addGallery(img);
+		}
+	}
+	
+	public void addStep(Collection<Etape> recipe_steps) {
+		for(Etape step : recipe_steps)
+		{
+			addStep(step);
+		}
 	}
 
 }
