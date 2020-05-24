@@ -15,7 +15,7 @@ function App() {
       <BrowserRouter>
         <Header />
         <Container className="container">
-          <Suspense fallback={<div>Loading...</div>}>
+          <Suspense fallback={<div></div>}>
             <Switch>
               <Route path='/search' component={Search} />
               <Route path='/basket' component={Basket} />

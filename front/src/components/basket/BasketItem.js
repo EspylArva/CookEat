@@ -6,7 +6,7 @@ function BasketItem({ id, designation, list_gallery, total_price, prep_time, rem
     return (
         <ListItem>
             <ListItemAvatar>
-                <Avatar alt={designation} src={list_gallery[0]} />
+                <Avatar alt={list_gallery[0].description} src={list_gallery[0].path} />
             </ListItemAvatar>
             <ListItemText
                 primary={designation}
