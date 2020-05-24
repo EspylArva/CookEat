@@ -3,6 +3,7 @@ package com.horizon.cookeat.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +18,8 @@ public class Allergene {
 	// ATTRIBUTES //
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "allergene_generator")
-	@SequenceGenerator(name="allergene_generator", sequenceName = "allergene_seq", initialValue = 900, allocationSize = 100)
+	@SequenceGenerator(name="allergene_generator", sequenceName = "allergene_seq", initialValue = 900, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	private String description;
 	

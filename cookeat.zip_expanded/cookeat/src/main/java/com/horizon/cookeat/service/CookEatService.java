@@ -82,6 +82,17 @@ public class CookEatService {
     		q.setFirstResult(pageNumber - 100); // 100 : starting index of recipes
             q.setMaxResults(quantity);
         	recipes = q.getResultList();
+        	
+        	System.out.println("SIZE OF THE POOL: " + recipes.size());
+        	
+        	if(recipes.size() < quantity)
+        	{
+        		recipes.addAll(fetchPool(100, quantity - recipes.size()));
+        	}
+        	else
+        	{
+        		// Nothing happens //
+        	}
 
     	}
         catch (RuntimeException e) {
@@ -214,15 +225,6 @@ public class CookEatService {
 			jRecipe.add("list_gallery", Utils.gson.toJsonTree(getGallery(r.getId()), new TypeToken<List<Gallery>>(){}.getType()));
 			jRecipe.add("list_steps", Utils.gson.toJsonTree(getSteps(r.getId()), new TypeToken<List<Etape>>(){}.getType()));
 			recipes.add(jRecipe);
-			
-//			if(r.getId() == 100)
-//			{
-//				System.out.println(jRecipe);
-//				for(R_Ingredient ing : _ri)
-//				{
-//					System.out.println(ing.getDesignation());
-//				}
-//			}
 		}
 		return recipes;
 	}	

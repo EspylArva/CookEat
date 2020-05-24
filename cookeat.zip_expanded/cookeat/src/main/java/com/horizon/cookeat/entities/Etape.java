@@ -1,5 +1,6 @@
 package com.horizon.cookeat.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -18,11 +19,13 @@ public class Etape {
 	@Expose
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "etape_generator")
-	@SequenceGenerator(name="etape_generator", sequenceName = "etape_seq", initialValue = 1000, allocationSize = 100)
+	@SequenceGenerator(name="etape_generator", sequenceName = "etape_seq", initialValue = 1000, allocationSize=1)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	@Expose
 	private int step_order;
 	@Expose
+	@Column(name = "description", length = 1024)
 	private String description;
 	
 	@ManyToOne(fetch = FetchType.LAZY)

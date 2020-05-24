@@ -1,5 +1,6 @@
 package com.horizon.cookeat.entities;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -17,8 +18,10 @@ public class Gallery {
 	 // ATTRIBUTES //
 	@Expose
 	@Id
+//	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "gallery_generator")
-	@SequenceGenerator(name="gallery_generator", sequenceName = "gallery_seq", initialValue = 700, allocationSize = 100)
+	@SequenceGenerator(name="gallery_generator", sequenceName = "gallery_seq", initialValue = 700, allocationSize = 2)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	@Expose
 	private String path;
@@ -39,6 +42,12 @@ public class Gallery {
     @Override
     public int hashCode() {
         return id;
+    }
+    
+    @Override
+    public String toString()
+    {
+    	return ("{ id: " + id + ", path: " + path + ", description: " + description + " }");
     }
 
 	// CONSTRUCTOR //

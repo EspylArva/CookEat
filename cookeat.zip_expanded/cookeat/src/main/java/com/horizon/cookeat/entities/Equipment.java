@@ -3,6 +3,7 @@ package com.horizon.cookeat.entities;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,7 +19,8 @@ public class Equipment {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "equipment_generator")
-	@SequenceGenerator(name="equipment_generator", sequenceName = "equipment_seq", initialValue = 300, allocationSize = 100)
+	@SequenceGenerator(name="equipment_generator", sequenceName = "equipment_seq", initialValue = 300, allocationSize=2)
+	@Column(name="id", updatable = false, nullable = false)
 	private int id;
 	
 	private String designation;

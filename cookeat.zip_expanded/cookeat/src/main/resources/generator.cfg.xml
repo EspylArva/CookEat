@@ -4,7 +4,7 @@
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
   
 <hibernate-configuration>
-    <session-factory name="generatorSessionFactory">
+    <session-factory>
   
         <!-- Connection settings -->
         <property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
@@ -20,6 +20,7 @@
   
         <!-- Update database on startup -->
         <property name="hibernate.hbm2ddl.auto">create-drop</property>
+        <property name="hibernate.id.new_generator_mappings">true</property>
         
         <!-- Annotated entity classes -->
         <mapping class="com.horizon.cookeat.entities.Ingredient"/>
