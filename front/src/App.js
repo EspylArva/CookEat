@@ -1,6 +1,6 @@
 import React, { Suspense, lazy } from 'react';
 import Header from './components/header/Header';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Switch, Redirect } from 'react-router-dom';
 import { Container } from '@material-ui/core';
 import './App.css';
 
@@ -19,7 +19,7 @@ function App() {
             <Switch>
               <Route path='/search' component={Search} />
               <Route path='/basket' component={Basket} />
-              <Route path ='/' component={Home} />
+              <Redirect path ='/' to='/search' />
             </Switch>
           </Suspense>
         </Container>
