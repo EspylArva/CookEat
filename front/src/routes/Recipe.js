@@ -53,8 +53,6 @@ function Recipe() {
     return ('No recipe found')
   }
 
-  
-
   return (
     <div>
       <div>
@@ -70,7 +68,7 @@ function Recipe() {
 
         </div>
       </div>
-      <div></div>
+      <div className={classes.bottomDiv}></div>
       <BottomNavigation
         value={value}
         onChange={(event, newValue) => {
@@ -98,14 +96,6 @@ function Recipe() {
           icon={<List />}
           label="Etape" />
       </BottomNavigation>
-    </div>
-  )
-}
-
-function Test() {
-  return(
-    <div>
-      test
     </div>
   )
 }
