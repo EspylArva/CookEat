@@ -45,7 +45,7 @@ function Recipe() {
   const [value, setValue] = React.useState(0);
 
   if(!recipe) {
-    return ('')
+    return ('No recipe found')
   }
 
   return (
@@ -89,6 +89,14 @@ function Recipe() {
           icon={<List />}
           label="Etape" />
       </BottomNavigation>
+    </div>
+  )
+}
+
+function Test() {
+  return(
+    <div>
+      test
     </div>
   )
 }
