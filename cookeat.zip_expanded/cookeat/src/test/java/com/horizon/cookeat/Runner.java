@@ -69,7 +69,6 @@ public class Runner {
     			JsonArray list_ingredients = json_recipe.get("ingredients").getAsJsonArray();
     			HashSet<R_Ingredient> recipe_ingredients = gson.fromJson(list_ingredients, new TypeToken<HashSet<R_Ingredient>>() {}.getType());
     			for(R_Ingredient ing : recipe_ingredients){ 
-    				System.out.println(ing.getDesignation());
     				session.saveOrUpdate(new Ingredient(ing.getUnit(),ing.getDesignation(), ing.getPrice_per_unit()));
 				}
     			
