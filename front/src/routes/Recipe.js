@@ -8,7 +8,7 @@ import MenuBook from '@material-ui/icons/MenuBook';
 import IngredientScreen from '../components/recipe/IngredientScreen.js';
 import InformationScreen from '../components/recipe/InformationScreen.js'
 import EtapeScreen from '../components/recipe/EtapeScreen.js'
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Redirect } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import useRecipe from '../hooks/useRecipe';
 
@@ -61,9 +61,10 @@ function Recipe() {
         </h2>
         <div>
           <Switch>
-            <Route path='/recipe/:recipeID/informations' component={InformationScreen}></Route>
+            <Route path='/recipe/:recipeID/informations' component={() => <InformationScreen {...recipe}/>} ></Route>
             <Route path='/recipe/:recipeID/ingredients' component={IngredientScreen}></Route>
             <Route path='/recipe/:recipeID/etape' component={EtapeScreen}></Route>
+            <Redirect to='/recipe/:recipeID/informations' path='/recipe/:recipeID'/>
           </Switch>
 
         </div>
@@ -84,7 +85,7 @@ function Recipe() {
           to={`/recipe/${recipeID}/informations`}
           icon={<MenuBook />}
           label="Information"
-          selected />
+           />
         <BottomNavigationAction
           component={Link}
           to={`/recipe/${recipeID}/ingredients`}

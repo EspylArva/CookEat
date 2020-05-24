@@ -25,12 +25,16 @@ const useStyles = makeStyles({
 });
 
 
-function InformationScreen(){
+function InformationScreen(
+    {designation,
+    id}
+){
     let { recipeID } = useParams();
     const classes = useStyles();
     //make a max width 
     return(
         <div>
+            <p>{designation}</p>
                 <AwesomeSlider className={classes.img}> 
                 <div data-src="/local_test_res/coquillettes_1.jpg" />
                 <div data-src="/local_test_res/coquillettes_2.jpg" />
