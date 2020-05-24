@@ -1,7 +1,7 @@
-import React from 'react';
-import { makeStyles,List } from '@material-ui/core';
-import { CircularProgress } from '@material-ui/core';
+import React, { useState } from 'react';
+import { makeStyles, List, CircularProgress, Snackbar, Dialog, DialogTitle, ListItem, ListItemText, Container } from '@material-ui/core';
 import CloudOffIcon from '@material-ui/icons/CloudOff';
+import CloseIcon from '@material-ui/icons/Close';
 import { Link } from 'react-router-dom';
 import BasketItem from './BasketItem';
 import useCookeatDB from '../../hooks/useCookEatDB';
@@ -20,6 +20,9 @@ const useStyles = makeStyles({
         fontWeight: "bold",
         color: "gray",
         textAlign: "center"
+    },
+    snackbar: {
+        cursor: 'pointer'
     }
 });
 
@@ -27,6 +30,16 @@ function BasketList() {
     const classes  = useStyles();
 
     const [basket, loading, error, actions] = useCookeatDB('basketRecipes');
+    const [ checkedItems, setCheckedItems ] = useState(new Array());
+    const [ isShoppingListOpen, setIsShoppingListOpen ] = useState(false);
+
+    function handleItemToggle(id) {
+        if(checkedItems.includes()) {
+            setCheckedItems(checkedItems.filter(element => id !== element))
+        } else {
+            setCheckedItems([...checkedItems, id])
+        }
+    }
 
     if(error) {
         return (
@@ -55,16 +68,56 @@ function BasketList() {
             </div>
         )
     }
-
     return (
         <React.Fragment>
             <List>
                 {
                     basket.map((recipe, index) => (
-                        <BasketItem key={recipe.id} remove={actions.remove} {...recipe} />
+                        <BasketItem onToggle={handleItemToggle} key={recipe.id} remove={actions.remove} {...recipe} />
                     ))
                 }
             </List>
+            <Snackbar
+                className={classes.snackbar}
+                open={checkedItems.length != 0 && !isShoppingListOpen}
+                anchorOrigin={{ 
+                    vertical: "bottom", 
+                    horizontal: "center"
+                }}
+                message={`Découvrez votre liste de course !`}
+                onClick={() => {setIsShoppingListOpen(true)}}
+            />            
+            <Dialog fullScreen onClose={() => {setIsShoppingListOpen(false)}} aria-labelledby="simple-dialog-title" open={isShoppingListOpen}>
+                <CloseIcon
+                    aria-label="close"
+                    fontSize="large"
+                    onClick={() => {setIsShoppingListOpen(false)}}
+                />
+                <Container>
+                    <DialogTitle id="simple-dialog-title">
+                        Liste de course
+                    </DialogTitle>
+                    <List>
+                        {
+                            basket
+                            .reduce((accumulator, recipe) => {
+                                if(checkedItems.includes(recipe.id)) {
+                                    return [...accumulator, ...recipe.ingredients]
+                                }
+                                return accumulator
+                            }, new Array())
+                            .map(ingredient => (
+                                <ListItem>
+                                    <ListItemText 
+                                        primary={ingredient.designation}
+                                        secondary={`${ingredient.quantity || ''} ${ingredient.unit || ''}`}
+                                    />
+                                </ListItem>
+                            ))
+                        }
+                    </List>
+                </Container>
+            </Dialog>
         </React.Fragment>
     )
 }
