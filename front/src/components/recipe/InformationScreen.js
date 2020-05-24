@@ -7,9 +7,6 @@ import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import {useParams} from "react-router-dom";
 
-const total_price = 2;
-const prep_time = 15;
-
 const useStyles = makeStyles({
     chip:{
         backgroundColor: "white",
@@ -27,19 +24,22 @@ const useStyles = makeStyles({
 
 function InformationScreen(
     {designation,
-    id}
+    total_price,
+    prep_time,
+    list_gallery}
 ){
     let { recipeID } = useParams();
     const classes = useStyles();
     //make a max width 
+    //<div data-src={list_gallery[0]}/>
+    //{list_gallery.map((item) =>(<div>{item}</div>))}
+    console.log(list_gallery)
     return(
         <div>
-            <p>{designation}</p>
-                <AwesomeSlider className={classes.img}> 
-                <div data-src="/local_test_res/coquillettes_1.jpg" />
-                <div data-src="/local_test_res/coquillettes_2.jpg" />
-                <div data-src="/local_test_res/coquillettes_3.jpg" />
-                </AwesomeSlider>
+            
+            <AwesomeSlider className={classes.img}> 
+                
+            </AwesomeSlider>
             
             <Chip  className={classes.chip} label={prep_time + "min"} icon={<HourglassEmptyIcon />} variant="outlined"/><br/>
             <Chip  className={classes.chip} label={total_price} icon={<EuroIcon />} variant="outlined" />

@@ -61,9 +61,9 @@ function Recipe() {
         </h2>
         <div>
           <Switch>
-            <Route path='/recipe/:recipeID/informations' component={() => <InformationScreen {...recipe}/>} ></Route>
-            <Route path='/recipe/:recipeID/ingredients' component={IngredientScreen}></Route>
-            <Route path='/recipe/:recipeID/etape' component={EtapeScreen}></Route>
+            <Route path='/recipe/:recipeID/informations' component={() => <InformationScreen {...recipe}/>} />
+            <Route path='/recipe/:recipeID/ingredients' component={() => <IngredientScreen {...recipe}/>}/>
+            <Route path='/recipe/:recipeID/etape' component={() => <EtapeScreen {...recipe}/>}/>
             <Redirect to='/recipe/:recipeID/informations' path='/recipe/:recipeID'/>
           </Switch>
 
