@@ -33,7 +33,9 @@ function useRecipe(id) {
         setOfflineLoading(true);
         try {
             // Offline first
-            setRecipe(await cookeatDb.basketRecipes.get(id))
+            const collection = await cookeatDb.basketRecipes.where("id").equals(parseInt(id))
+            const recipe = await collection.first()
+            setRecipe(recipe)
             setOfflineLoading(false);
             setError(undefined);
         } catch (e) {
