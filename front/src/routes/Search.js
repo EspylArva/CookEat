@@ -8,6 +8,7 @@ const useStyles = makeStyles({
         position: "relative",
         width: "100%",
         height: "calc(100vh - 80px)", // 100vh - the size of the header
+        height: 'calc(var(--vh, 1vh) * 100)',
         overflow: "hidden",
     },
     deck: {
