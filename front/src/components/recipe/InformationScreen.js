@@ -37,7 +37,6 @@ function InformationScreen(
     start_season,
     end_season}
 ){
-    let { recipeID } = useParams();
     const classes = useStyles();
     //make a max width 
     //<div data-src={list_gallery[0]}/>
@@ -46,16 +45,17 @@ function InformationScreen(
     console.log(list_gallery)
     return(
         <div className={classes.imgContainerDiv}>
-
+            <hr/>
+            <Chip  className={classes.chip} label={prep_time + "min"} icon={<HourglassEmptyIcon />} variant="outlined"/><span>&emsp;</span>
+            <Chip  className={classes.chip} label={total_price} icon={<EuroIcon />} variant="outlined" /><span>&emsp;</span>
+            <Chip  className={classes.chip} label={period} icon={<CalendarTodayIcon />} variant="outlined" /> <hr/>
             <AliceCarousel  autoPlay autoPlayInterval="5000" className={classes.img}>
                 {list_gallery.map((item) =>(
                     <img src={item.path} className={classes.img} />
                 ))}
             </AliceCarousel>
             
-            <Chip  className={classes.chip} label={prep_time + "min"} icon={<HourglassEmptyIcon />} variant="outlined"/><br/>
-            <Chip  className={classes.chip} label={total_price} icon={<EuroIcon />} variant="outlined" /><br/>
-            <Chip  className={classes.chip} label={period} icon={<CalendarTodayIcon />} variant="outlined" />
+            
         </div>
     )
 }
