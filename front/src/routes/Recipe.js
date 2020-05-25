@@ -11,7 +11,7 @@ import EtapeScreen from '../components/recipe/EtapeScreen.js'
 import { Link, useParams, Redirect } from 'react-router-dom';
 import { Route, Switch } from 'react-router-dom';
 import useRecipe from '../hooks/useRecipe';
-
+import ShoppingBasketOutlinedIcon from '@material-ui/icons/ShoppingBasketOutlined';
 
 const useStyles = makeStyles({
 
@@ -95,6 +95,12 @@ function Recipe() {
           to={`/recipe/${recipeID}/etape`}
           icon={<List />}
           label="Etape" />
+        <BottomNavigationAction
+          component={Link}
+          to={`/basket`}
+          icon={<ShoppingBasketOutlinedIcon />}
+          label="Basket"
+          />
       </BottomNavigation>
     </div>
   )
