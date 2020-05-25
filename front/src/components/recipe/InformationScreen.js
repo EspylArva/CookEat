@@ -4,8 +4,6 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import AwesomeSlider from 'react-awesome-slider';
-import 'react-awesome-slider/dist/styles.css';
 import {useParams} from "react-router-dom";
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css";
@@ -23,15 +21,13 @@ const useStyles = makeStyles({
         maxWidth:"1000px"
     },
     imgContainerDiv:{
-        alignItems:"center",
-        Display: 'flex',
-
+        left: '50%',
+        top: '50%',
     }
 });
 var months = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ];
-
-var Carousel = require('react-responsive-carousel').Carousel;
+const { innerWidth: width, innerHeight: height } = window;
 
 function InformationScreen(
     {designation,
