@@ -7,6 +7,8 @@ import { makeStyles } from '@material-ui/core';
 import AwesomeSlider from 'react-awesome-slider';
 import 'react-awesome-slider/dist/styles.css';
 import {useParams} from "react-router-dom";
+import AliceCarousel from 'react-alice-carousel';
+import "react-alice-carousel/lib/alice-carousel.css";
 
 const useStyles = makeStyles({
     chip:{
@@ -17,13 +19,19 @@ const useStyles = makeStyles({
         margin:'0 0 2% 0'
     },
     img:{
-        margin:"0 0 10% 0",
-        maxWidth:"100px"
+        minWidth:"100px",
+        maxWidth:"1000px"
+    },
+    imgContainerDiv:{
+        alignItems:"center",
+        Display: 'flex',
+
     }
 });
 var months = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ];
 
+var Carousel = require('react-responsive-carousel').Carousel;
 
 function InformationScreen(
     {designation,
@@ -41,11 +49,13 @@ function InformationScreen(
     const period = "De " + months[start_season] + " à " + months[end_season]
     console.log(list_gallery)
     return(
-        <div>
-            
-            <AwesomeSlider className={classes.img}> 
-                {list_gallery.map((item) =>(<div>{item.path}</div>))}
-            </AwesomeSlider>
+        <div className={classes.imgContainerDiv}>
+
+            <AliceCarousel  autoPlay autoPlayInterval="5000" className={classes.img}>
+                {list_gallery.map((item) =>(
+                    <img src={item.path} className={classes.img} />
+                ))}
+            </AliceCarousel>
             
             <Chip  className={classes.chip} label={prep_time + "min"} icon={<HourglassEmptyIcon />} variant="outlined"/><br/>
             <Chip  className={classes.chip} label={total_price} icon={<EuroIcon />} variant="outlined" /><br/>
