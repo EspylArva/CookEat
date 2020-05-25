@@ -50,23 +50,19 @@ function InformationScreen(
     // Period test
     var authorizedMonths = []
     let newDate = new Date()
-    let date = newDate.getDate();
     let currentMonth = newDate.getMonth();
     var goodMonth;
 
     var iterator = start_season;
     authorizedMonths.push(iterator)
-    console.log('TEST :' + iterator, end_season )
     while(iterator != end_season) {
         iterator ++;
         if(iterator > 11){
             iterator = 0;
         }
         authorizedMonths.push(iterator);
-        console.log('HEY : ',iterator)
         
     }
-    console.log('Final list : ' + authorizedMonths)
 
     if(authorizedMonths.includes(currentMonth)){
         goodMonth = true;
@@ -75,7 +71,6 @@ function InformationScreen(
     }
     //end period test
     const period = "From " + months[start_season] + " to " + months[end_season]
-    console.log(start_season, end_season, goodMonth)
     return(
         <div className={classes.imgContainerDiv}>
             <hr/>
