@@ -20,7 +20,7 @@ function EtapeScreen(
         <div className={classes.mainDiv}>
             {list_steps.map((item, index) =>(
                <div>
-                   <h4>Etape {item.step_order + 1}</h4>
+                   <h4>Step {item.step_order + 1}</h4>
                    {item.description}
                </div>
             ))

@@ -30,8 +30,8 @@ const useStyles = makeStyles({
         objectFit: 'cover'
     }
 });
-var months = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
-           "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre" ];
+var months = [ "January", "February", "March", "April", "May", "June", 
+           "July", "August", "September", "October", "November", "December" ];
 const { innerWidth: width, innerHeight: height } = window;
 
 function InformationScreen(
@@ -43,10 +43,8 @@ function InformationScreen(
     end_season}
 ){
     const classes = useStyles();
-    //make a max width 
-    //<div data-src={list_gallery[0]}/>
-    //{list_gallery.map((item) =>(<div>{item}</div>))}
-    const period = "De " + months[start_season] + " à " + months[end_season]
+    
+    const period = "From " + months[start_season] + " to " + months[end_season]
     console.log(list_gallery)
     return(
         <div className={classes.imgContainerDiv}>
