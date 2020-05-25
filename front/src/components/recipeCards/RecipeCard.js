@@ -153,8 +153,8 @@ function RecipeCard({
       >
         <CardMedia
             className={classes.media}
-            image={list_gallery[0]}
-            title={designation}
+            image={list_gallery[0].path}
+            title={list_gallery[0].description}
           />
         <CardActionArea>
           <CardContent className={classes.content}>
