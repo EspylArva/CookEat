@@ -35,8 +35,8 @@ const useStyles = makeStyles({
 });
 var months = [ "January", "February", "March", "April", "May", "June", 
            "July", "August", "September", "October", "November", "December" ];
-var monthsNb = [0, 1, 2, 3, 4 , 5, 6, 7, 8, 9 , 10 , 11];
-var authorizedMonths = []
+
+
 
 function InformationScreen(
     {
@@ -47,19 +47,33 @@ function InformationScreen(
     end_season}
 ){
     const classes = useStyles();
+    // Period test
+    var authorizedMonths = []
     let newDate = new Date()
     let date = newDate.getDate();
     let currentMonth = newDate.getMonth();
     var goodMonth;
 
+    var iterator = start_season;
+    authorizedMonths.push(iterator)
+    console.log('TEST :' + iterator, end_season )
+    while(iterator != end_season) {
+        iterator ++;
+        if(iterator > 11){
+            iterator = 0;
+        }
+        authorizedMonths.push(iterator);
+        console.log('HEY : ',iterator)
+        
+    }
+    console.log('Final list : ' + authorizedMonths)
 
-
-    if(currentMonth >= start_season && currentMonth <= end_season){
+    if(authorizedMonths.includes(currentMonth)){
         goodMonth = true;
     }else{
         goodMonth = false
     }
-
+    //end period test
     const period = "From " + months[start_season] + " to " + months[end_season]
     console.log(start_season, end_season, goodMonth)
     return(
