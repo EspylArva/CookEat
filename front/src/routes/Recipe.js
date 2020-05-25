@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles, styled } from '@material-ui/core';
+import { makeStyles} from '@material-ui/core';
 import BottomNavigation from '@material-ui/core/BottomNavigation';
 import BottomNavigationAction from '@material-ui/core/BottomNavigationAction';
 import List from '@material-ui/icons/List';
@@ -16,7 +16,6 @@ import useRecipe from '../hooks/useRecipe';
 const useStyles = makeStyles({
 
   root: {
-    backgroundColor: "cyan",
     background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
     position: "fixed",
     bottom: 0,

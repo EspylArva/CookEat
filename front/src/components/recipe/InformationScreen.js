@@ -4,7 +4,6 @@ import HourglassEmptyIcon from '@material-ui/icons/HourglassEmpty';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import { Chip } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core';
-import {useParams} from "react-router-dom";
 import AliceCarousel from 'react-alice-carousel';
 import "react-alice-carousel/lib/alice-carousel.css";
 
@@ -15,10 +14,6 @@ const useStyles = makeStyles({
         borderWidth: "2px",
         borderColor:"black",
         margin:'0 0 2% 0'
-    },
-    img:{
-        minWidth:"100px",
-        maxWidth:"1000px"
     },
     imgContainerDiv:{
         left: '50%',
@@ -32,10 +27,9 @@ const useStyles = makeStyles({
 });
 var months = [ "January", "February", "March", "April", "May", "June", 
            "July", "August", "September", "October", "November", "December" ];
-const { innerWidth: width, innerHeight: height } = window;
 
 function InformationScreen(
-    {designation,
+    {
     total_price,
     prep_time,
     list_gallery,
@@ -43,7 +37,7 @@ function InformationScreen(
     end_season}
 ){
     const classes = useStyles();
-    
+
     const period = "From " + months[start_season] + " to " + months[end_season]
     console.log(list_gallery)
     return(
@@ -62,5 +56,4 @@ function InformationScreen(
         </div>
     )
 }
-//
 export default InformationScreen;
