@@ -23,6 +23,11 @@ const useStyles = makeStyles({
     imgContainerDiv:{
         left: '50%',
         top: '50%',
+    },
+    sliderimg:{
+        width: '100%',
+        height: '500px',
+        objectFit: 'cover'
     }
 });
 var months = [ "Janvier", "Février", "Mars", "Avril", "Mai", "Juin", 
@@ -51,7 +56,7 @@ function InformationScreen(
             <Chip  className={classes.chip} label={period} icon={<CalendarTodayIcon />} variant="outlined" /> <hr/>
             <AliceCarousel  autoPlay autoPlayInterval="5000" className={classes.img}>
                 {list_gallery.map((item) =>(
-                    <img src={item.path} className={classes.img} />
+                    <img src={item.path} className={classes.sliderimg} />
                 ))}
             </AliceCarousel>
             
