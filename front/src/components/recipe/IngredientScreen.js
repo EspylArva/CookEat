@@ -1,10 +1,18 @@
 import React from 'react';
 
 
-function IngredientScreen(){
+function IngredientScreen(
+    {ingredients}
+){
     return(
         <div>
-            Ingredient Screen !
+            {ingredients.map((item, index) =>(
+               <div>
+                   <h4>{item.designation}</h4>
+                   <p>{item.price_per_unit} {item.unit}</p>
+               </div>
+            ))
+            }
         </div>
     )
 }
